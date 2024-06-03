@@ -1,12 +1,12 @@
 <template>
   <iframe
-  width="560"
-  height="315"
-  :src="`https://player.vimeo.com/video/${props.videoId}`"
-  title="Video Player"
-  frameborder="0"
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-  allowfullscreen
+    width="560"
+    height="315"
+    :src="`https://player.vimeo.com/video/${props.videoId}`"
+    title="Video Player"
+    style="border: 0.5rem outset cadetblue"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen
   ></iframe>
 </template>
 
