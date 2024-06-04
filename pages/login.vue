@@ -1,6 +1,6 @@
 <template>
   <div class="prose w-full max-w-2xl h-9">
-    <h1>Log in to {{ title }}</h1>
+    <h1>Log in to {{ course.title }}</h1>
     <span>
       <button
         id="button"
@@ -25,7 +25,7 @@ button:active {
 </style>
 
 <script setup lang="ts">
-const { title } = useCourse();
+const course = await useCourse();
 const { query } = useRoute();
 const supabase = useSupabaseClient();
 const user = useSupabaseUser();
@@ -38,7 +38,8 @@ watchEffect(async () => {
     });
   }
 });
-
+//Creates login function that when called checks for user authorization through github
+//then redirects user to index page.
 const login = async () => {
   const redirectTo = "${window.location.origin}${query.redirectTo}";
   const { error } = await supabase.auth.signInWithOAuth({
