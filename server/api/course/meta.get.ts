@@ -2,7 +2,7 @@ import { PrismaClient, Prisma } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-const lessonSelect = Prisma.validator<Prisma.LessonArgs>()({
+const lessonSelect = Prisma.validator<Prisma.LessonDefaultArgs>()({
   select: {
     title: true,
     slug: true,
@@ -12,7 +12,7 @@ const lessonSelect = Prisma.validator<Prisma.LessonArgs>()({
 
 export type LessonOutline = Prisma.LessonGetPayload<typeof lessonSelect>;
 
-const chapterSelect = Prisma.validator<Prisma.ChapterArgs>()({
+const chapterSelect = Prisma.validator<Prisma.ChapterDefaultArgs>()({
   select: {
     title: true,
     slug: true,
@@ -22,7 +22,7 @@ const chapterSelect = Prisma.validator<Prisma.ChapterArgs>()({
 });
 export type ChapterOutline = Prisma.ChapterGetPayload<typeof chapterSelect>;
 
-const courseSelect = Prisma.validator<Prisma.CourseArgs>()({
+const courseSelect = Prisma.validator<Prisma.CourseDefaultArgs>()({
   select: {
     title: true,
     chapters: chapterSelect,
