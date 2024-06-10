@@ -81,6 +81,7 @@ const formStyle = {
   },
 };
 const elements = computed(() => stripe.value?.elements());
+
 const setupStripe = () => {
   stripe.value = Stripe(config.public.stripeKey);
   if (!card.value && elements.value) {
@@ -90,12 +91,15 @@ const setupStripe = () => {
     card.value.mount('#card-element');
   }
 };
+
 const handleSubmit = async () => {
   if (email.value === '') {
     return;
   }
+
   processingPayment.value = true;
   let secret;
+
   try {
     // Create a PaymentIntent with the order amount and currency
     const response = await $fetch(
@@ -111,6 +115,7 @@ const handleSubmit = async () => {
   } catch (e) {
     console.log(e);
   }
+
   try {
     const response = await stripe.value.confirmCardPayment(
       secret,
@@ -121,9 +126,14 @@ const handleSubmit = async () => {
         receipt_email: email.value,
       }
     );
+
+    console.log(response.paymentIntent.status);
+    console.log(response.paymentIntent.Id);
+
     if (response.paymentIntent.status === 'succeeded') {
       success.value = true;
       paymentIntentId.value = response.paymentIntent.Id;
+      console.log(paymentIntentId.value);
     }
   } catch (e) {
     console.log(e);
@@ -133,10 +143,14 @@ const handleSubmit = async () => {
 };
 
 const login = async () => {
+  console.log(paymentIntentId.value);
+
   if (!paymentIntentId.value) {
     return;
   }
+
   const redirectTo = `/linkWithPurchase/${paymentIntentId.value}`;
+
   await navigateTo(`/login?redirectTo=${redirectTo}`);
 };
 

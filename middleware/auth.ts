@@ -1,12 +1,22 @@
-export default defineNuxtRouteMiddleware((to, from) => {
+export default defineNuxtRouteMiddleware(async (to) => {
   const user = useSupabaseUser();
+  const { data: hasAccess } = await useFetch(
+    '/api/user/hasAccess',
+    {
+      headers: useRequestHeaders(['cookie']),
+    }
+  );
 
-  //should check if user is signed in or in first chapter and allows access to those routes
-  if (user.value || to.params.chapterSlug === "1-chapter-1") {
+  if (
+    hasAccess.value ||
+    to.params.chapterSlug === '1-chapter-1'
+  ) {
     return;
+  } else if (user.value && !hasAccess.value) {
+    // Prevent logging in with Github if user has not purchased course
+    const client = useSupabaseClient();
+    await client.auth.signOut();
   }
 
-  //if user is not logged in or in the first chapter redirect to login page
-  //and store previous route for redirection after login
   return navigateTo(`/login?redirectTo=${to.path}`);
 });

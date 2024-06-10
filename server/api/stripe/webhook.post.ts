@@ -49,7 +49,6 @@ async function handlePaymentIntentSucceeded(
 ) {
   // Verify the related course purchase
   try {
-    //@ts-ignore
     await prisma.coursePurchase.update({
       where: {
         paymentId: paymentIntent.id,
