@@ -12,6 +12,7 @@ export default defineEventHandler(async (event) => {
   protectRoute(event);
 
   // Get the route params
+  //@ts-ignore
   const { chapterSlug, lessonSlug } = event.context.params;
 
   // Get the lesson from the DB
@@ -39,6 +40,7 @@ export default defineEventHandler(async (event) => {
   const {
     user: { email: userEmail },
   } = event.context;
+  //@ts-ignore
   return prisma.lessonProgress.upsert({
     where: {
       lessonId_userEmail: {

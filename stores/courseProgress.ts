@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { CourseProgress } from '~/types/course';
+import type { CourseProgress } from '~/types/course';
 
 export const useCourseProgress = defineStore(
   'courseProgress',

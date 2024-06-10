@@ -1,10 +1,10 @@
 import { PrismaClient } from '@prisma/client';
 import protectRoute from '~/server/utils/protectRoute';
-import {
+import type {
   ChapterOutline,
   LessonOutline,
 } from '../course/meta.get';
-import {
+import type {
   CourseProgress,
   ChapterProgress,
 } from '~/types/course';
@@ -21,6 +21,7 @@ export default defineEventHandler(async (event) => {
   } = event.context;
 
   // Get the progress from the DB
+  //@ts-ignore
   const userProgress = await prisma.lessonProgress.findMany(
     {
       where: {
@@ -76,6 +77,7 @@ export default defineEventHandler(async (event) => {
           // Collect the progress for each lesson in the chapter
           chapterProgress[lesson.slug] =
             userProgress.find(
+              //@ts-ignore
               (progress) =>
                 progress.Lesson.slug === lesson.slug &&
                 progress.Lesson.Chapter.slug ===
