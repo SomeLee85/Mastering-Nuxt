@@ -5,7 +5,7 @@
     >
       <form>
         <h2 class="font-bold text-xl text-center">
-          Buying {{ course.title }}
+          Buying {{ course.title }}!
         </h2>
         <div
           class="mt-8 text-base width bg-white py-6 px-8 rounded shadow-md"
