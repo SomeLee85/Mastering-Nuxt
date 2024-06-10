@@ -1,10 +1,8 @@
 <template>
   <div>
-    <div
-      class="mb-4 flex justify-between items-center w-full"
-    >
+    <div class="mb-4 flex justify-between items-center w-full">
       <h1 class="text-3xl">
-        <span class="font-medium">
+        <span class="font-medium text-green-800">
           <span class="font-bold">{{ course.title }}</span>
         </span>
       </h1>
@@ -15,45 +13,31 @@
       <div
         class="prose mr-4 p-8 bg-white rounded-md min-w-[20ch] max-w-[30ch] flex flex-col"
       >
-        <h3>Chapters</h3>
+        <h3 class="text-green-800">Chapters</h3>
+        <!--Renders the chapters into navigation tab-->
         <div
           class="space-y-1 mb-4 flex flex-col"
-          v-for="(chapter, index) in course.chapters"
+          v-for="chapter in course.chapters"
           :key="chapter.slug"
         >
-          <h4 class="flex justify-between items-center">
-            {{ chapter.title }}
-            <span
-              v-if="percentageCompleted && user"
-              class="text-emerald-500 text-sm"
-            >
-              {{ percentageCompleted.chapters[index] }}%
-            </span>
-          </h4>
+          <h4 class="underline">{{ chapter.title }}</h4>
+
+          <!--Shows each lesson within a chapter-->
+          <!--Provides a lesson path route to navigate to each lesson and highlights current selection-->
           <NuxtLink
             v-for="(lesson, index) in chapter.lessons"
             :key="lesson.slug"
             class="flex flex-row space-x-1 no-underline prose-sm font-normal py-1 px-4 -mx-4"
             :to="lesson.path"
             :class="{
-              'text-blue-500':
-                lesson.path === $route.fullPath,
-              'text-gray-600':
-                lesson.path !== $route.fullPath,
+              'text-blue-500': lesson.path === $route.fullPath,
+              'text-gray-600': lesson.path !== $route.fullPath,
             }"
           >
-            <span class="text-gray-500"
-              >{{ index + 1 }}.</span
-            >
+            <!--Numerates the lessons and renders title-->
+            <span class="text-gray-500">{{ index + 1 }}. </span>
             <span>{{ lesson.title }}</span>
           </NuxtLink>
-        </div>
-        <div
-          v-if="percentageCompleted"
-          class="mt-8 text-sm font-medium text-gray-500 flex justify-between items-center"
-        >
-          Course completion:
-          <span> {{ percentageCompleted.course }}% </span>
         </div>
       </div>
 
@@ -62,12 +46,12 @@
           <NuxtPage />
           <template #error="{ error }">
             <p>
-              Oh no, something went wrong with the lesson!
+              Something went wrong with the lesson.
               <code>{{ error }}</code>
             </p>
             <p>
               <button
-                class="hover:cursor-pointer bg-gray-500 text-white font-bold py-1 px-3 rounded"
+                class="hover:curor-pointer bg-gray-500 text-white font-bold py-1 px-3 rounded"
                 @click="resetError(error)"
               >
                 Reset
@@ -81,16 +65,8 @@
 </template>
 
 <script setup>
-import { useCourseProgress } from '~/stores/courseProgress';
-import { storeToRefs } from 'pinia';
-const user = useSupabaseUser();
 const course = await useCourse();
 const firstLesson = await useFirstLesson();
-
-// Get chapter completion percentages
-const { percentageCompleted } = storeToRefs(
-  useCourseProgress()
-);
 
 const resetError = async (error) => {
   await navigateTo(firstLesson.path);

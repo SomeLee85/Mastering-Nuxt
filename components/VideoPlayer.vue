@@ -3,8 +3,8 @@
     width="560"
     height="315"
     :src="`https://player.vimeo.com/video/${props.videoId}`"
-    title="Video player"
-    frameborder="0"
+    title="Video Player"
+    style="border: 0.5rem outset cadetblue"
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
     allowfullscreen
   ></iframe>
