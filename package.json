@@ -19,6 +19,7 @@
     "@vueuse/nuxt": "^10.7.0",
     "nuxt": "^3.8.2",
     "pinia": "^2.1.7",
-    "prisma": "^5.7.0"
+    "prisma": "^5.7.0",
+    "vite-plugin-vsharp": "^1.8.1"
   }
 }
