@@ -3,9 +3,6 @@
   "prisma": {
     "seed": "node prisma/seed.mjs"
   },
-  "prisma": {
-    "seed": "node prisma/seed.mjs"
-  },
   "scripts": {
     "build": "prisma generate && nuxt build",
     "dev": "nuxt dev",

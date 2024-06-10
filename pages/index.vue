@@ -1,7 +1,10 @@
 <template>
   <h1 class="text-green-800 text-bold">Quick Links</h1>
   <span>
-    <NuxtLink class="underline font-medium" :href="firstLesson.path">
+    <NuxtLink
+      class="underline font-medium"
+      :href="firstLesson.path"
+    >
       Go to first lesson.
     </NuxtLink>
   </span>
