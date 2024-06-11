@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      sharp:
+        specifier: ^0.33.4
+        version: 0.33.4
       stripe:
         specifier: ^15.10.0
         version: 15.10.0

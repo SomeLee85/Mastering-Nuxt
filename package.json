@@ -23,6 +23,7 @@
     "vite-plugin-vsharp": "^1.8.1"
   },
   "dependencies": {
+    "sharp": "^0.33.4",
     "stripe": "^15.10.0"
   }
 }
