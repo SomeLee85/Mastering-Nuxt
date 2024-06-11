@@ -21,7 +21,6 @@ export default defineEventHandler(async (event) => {
   } = event.context;
 
   // Get the progress from the DB
-  //@ts-ignore
   const userProgress = await prisma.lessonProgress.findMany(
     {
       where: {
@@ -77,7 +76,6 @@ export default defineEventHandler(async (event) => {
           // Collect the progress for each lesson in the chapter
           chapterProgress[lesson.slug] =
             userProgress.find(
-              //@ts-ignore
               (progress) =>
                 progress.Lesson.slug === lesson.slug &&
                 progress.Lesson.Chapter.slug ===

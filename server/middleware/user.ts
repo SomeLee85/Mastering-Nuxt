@@ -1,5 +1,6 @@
 import { serverSupabaseUser } from '#supabase/server';
-
+//creates cookies for user to allow user to refresh page
+//and still have access to the same route and database
 export default defineEventHandler(async (event) => {
   const cookies = parseCookies(event);
 

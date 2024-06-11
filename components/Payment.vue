@@ -55,7 +55,7 @@
             v-if="processingPayment"
             class="h-5 w-5"
           />
-          <div v-else>Pay $97</div>
+          <div v-else>Pay $74.89</div>
         </button>
       </form>
     </div>

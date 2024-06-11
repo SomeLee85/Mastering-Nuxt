@@ -7,10 +7,11 @@ export default defineEventHandler(async (event) => {
   const { email } = await readBody(event);
 
   // We only have one course for now, so we have the price hard-coded
+  //sets the price that will be charged through stripe
   let paymentIntent;
   try {
     paymentIntent = await stripe.paymentIntents.create({
-      amount: 97 * 100,
+      amount: 7489,
       currency: 'usd',
       metadata: {
         email,
