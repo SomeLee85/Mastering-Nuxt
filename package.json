@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "@nuxtjs/supabase": "^1.1.4",
-    "@nuxtjs/tailwindcss": "^6.9.3",
+    "@nuxtjs/tailwindcss": "^6.9.4",
     "@pinia/nuxt": "^0.5.1",
     "@prisma/client": "^5.7.0",
     "@tailwindcss/typography": "^0.5.8",

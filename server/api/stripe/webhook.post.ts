@@ -71,7 +71,6 @@ async function handlePaymentIntentFailed(
 ) {
   // Clean up the course purchase
   try {
-    //@ts-ignore
     await prisma.coursePurchase.delete({
       where: {
         paymentId: paymentIntent.id,

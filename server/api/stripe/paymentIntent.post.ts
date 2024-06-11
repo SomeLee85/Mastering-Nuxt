@@ -25,7 +25,6 @@ export default defineEventHandler(async (event) => {
 
   // Create a course purchase record
   try {
-    //@ts-ignore
     await prisma.coursePurchase.create({
       data: {
         userEmail: email,

@@ -94,6 +94,7 @@ const setupStripe = () => {
 
 const handleSubmit = async () => {
   if (email.value === '') {
+    console.log(email.value);
     return;
   }
 
@@ -127,13 +128,9 @@ const handleSubmit = async () => {
       }
     );
 
-    console.log(response.paymentIntent.status);
-    console.log(response.paymentIntent.Id);
-
     if (response.paymentIntent.status === 'succeeded') {
       success.value = true;
-      paymentIntentId.value = response.paymentIntent.Id;
-      console.log(paymentIntentId.value);
+      paymentIntentId.value = response.paymentIntent.id;
     }
   } catch (e) {
     console.log(e);
@@ -143,8 +140,6 @@ const handleSubmit = async () => {
 };
 
 const login = async () => {
-  console.log(paymentIntentId.value);
-
   if (!paymentIntentId.value) {
     return;
   }
