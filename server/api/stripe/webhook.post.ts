@@ -28,7 +28,7 @@ export default defineEventHandler(async (event) => {
       statusMessage: 'Invalid signature',
     });
   }
-
+  console.log(stripeEvent);
   if (stripeEvent.type === 'payment_intent.succeeded') {
     await handlePaymentIntentSucceeded(
       stripeEvent.data.object

@@ -10,7 +10,6 @@ export default defineEventHandler(async (event) => {
 
   // Update course purchase record
   try {
-    //@ts-ignore
     await prisma.coursePurchase.update({
       where: {
         paymentId,

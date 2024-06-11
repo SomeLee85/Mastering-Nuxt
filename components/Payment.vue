@@ -94,7 +94,6 @@ const setupStripe = () => {
 
 const handleSubmit = async () => {
   if (email.value === '') {
-    console.log(email.value);
     return;
   }
 
