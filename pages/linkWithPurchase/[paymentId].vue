@@ -9,7 +9,7 @@ watchEffect(async () => {
         headers: useRequestHeaders(['cookie']),
       }
     );
-    await navigateTo('/', {
+    await navigateTo('/course', {
       replace: true,
     });
   }

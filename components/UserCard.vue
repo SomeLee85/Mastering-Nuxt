@@ -17,6 +17,19 @@
       </button>
     </div>
   </div>
+  <div
+    v-else
+    class="rounded p-3 flex items-center space-x-3 bg-white"
+  >
+    <div class="text-right">
+      <button
+        class="text-sm underline text-slate-500"
+        @click="login"
+      >
+        Login with GitHub
+      </button>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -31,7 +44,17 @@ const logout = async () => {
     return;
   }
 
-  await navigateTo('/login');
+  // await navigateTo('/');
+};
+
+const login = async () => {
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: 'github',
+  });
+
+  if (error) {
+    console.error(error);
+  }
 };
 
 const name = computed(

@@ -18,5 +18,5 @@ export default defineNuxtRouteMiddleware(async (to) => {
     await client.auth.signOut();
   }
 
-  return navigateTo(`/login?redirectTo=${to.path}`);
+  return navigateTo(`/?redirectTo=${to.path}`);
 });

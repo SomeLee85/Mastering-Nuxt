@@ -34,12 +34,6 @@
   </div>
 </template>
 
-<style scoped>
-.lesson-link-list a:hover {
-  color: #008bff;
-}
-</style>
-
 <script setup>
 import { useCourseProgress } from '~/stores/courseProgress.ts';
 const course = await useCourse();

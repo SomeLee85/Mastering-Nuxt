@@ -10,7 +10,7 @@ watch(
   user,
   () => {
     if (user.value) {
-      const to = (query.redirectTo as string) ?? '/';
+      const to = (query.redirectTo as string) ?? '/course';
       return navigateTo(to, {
         replace: true,
       });

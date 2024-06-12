@@ -70,6 +70,8 @@ const email = ref('');
 const processingPayment = ref(false);
 const success = ref(false);
 const paymentIntentId = ref(null);
+const supabase = useSupabaseClient();
+const { query } = useRoute();
 
 const formStyle = {
   base: {
@@ -142,10 +144,16 @@ const login = async () => {
   if (!paymentIntentId.value) {
     return;
   }
-
   const redirectTo = `/linkWithPurchase/${paymentIntentId.value}`;
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: 'github',
+    options: { redirectTo },
+  });
 
-  await navigateTo(`/login?redirectTo=${redirectTo}`);
+  if (error) {
+    console.error(error);
+  }
+  await navigateTo(`/course?redirectTo=${redirectTo}`);
 };
 
 useHead({

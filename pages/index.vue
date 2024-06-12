@@ -14,10 +14,23 @@
       that's easier to reason about and refactor.
     </div>
     <button
-      class="bg-yellow-400 hover:bg-yellow-500 transition px-8 py-4 w-80 text-xl font-bold rounded-lg"
+      class="bg-yellow-400 hover:bg-yellow-500 transition px-9 py-4 w-80 text-xl font-bold rounded-lg"
       @click="() => (showPayment = !showPayment)"
     >
       Buy Now
+    </button>
+    <p class="text-lg font-bold">or</p>
+    <button
+      class="text-lg bg-green-600 hover:bg-green-700 rounded-lg py-4 px-9 py-5 w-70 font-bold text-black"
+      @click="login"
+    >
+      Login with GitHub
+      <img
+        :src="logo"
+        width="40"
+        height="40"
+        style="float: right"
+      />
     </button>
   </Section>
   <Section title="What You'll Learn">
@@ -83,7 +96,13 @@ import screen2 from '~/assets/images/screen2.png';
 import screen3 from '~/assets/images/screen3.png';
 import screen4 from '~/assets/images/screen4.png';
 import screen5 from '~/assets/images/screen5.png';
+import logo from '~/assets/images/ghub-logo2.png';
+
 const course = await useCourse();
+const { query } = useRoute();
+const supabase = useSupabaseClient();
+const user = useSupabaseUser();
+
 const learningOutcomes = [
   'Hands-On Experience with the Benefits of TypeScript',
   'How to make the most out of your IDE',
@@ -101,5 +120,29 @@ const screenshots = [
 definePageMeta({
   layout: false,
 });
+
+watchEffect(async () => {
+  if (user.value) {
+    await navigateTo(query.redirectTo as string, {
+      replace: true,
+    });
+  }
+});
+//query comes from middleware auth
+const login = async () => {
+  const queryParams =
+    query.redirectTo !== undefined
+      ? `?redirectTo=${query.redirectTo}`
+      : '';
+  const redirectTo = `/linkWithPurchase/${paymentIntentId.value}`;
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: 'github',
+    options: { redirectTo },
+  });
+
+  if (error) {
+    console.error(error);
+  }
+};
 const showPayment = ref(false);
 </script>
