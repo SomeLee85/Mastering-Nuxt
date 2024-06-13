@@ -11,7 +11,7 @@ export default defineNuxtConfig({
 
   nitro: {
     prerender: {
-      routes: ['/landing'],
+      routes: ['/'],
     },
   },
 
@@ -27,7 +27,7 @@ export default defineNuxtConfig({
   ],
   supabase: {
     redirectOptions: {
-      login: '/login',
+      login: '/course',
       callback: '/confirm',
       exclude: ['/*'], // We implement our own auth behaviour in the auth middleware
     },

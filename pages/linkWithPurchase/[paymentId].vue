@@ -3,7 +3,7 @@ const user = useSupabaseUser();
 watchEffect(async () => {
   if (user.value) {
     const route = useRoute();
-    await useFetch(
+    await $fetch(
       `/api/user/linkWithPurchase/${route.params.paymentId}`,
       {
         headers: useRequestHeaders(['cookie']),

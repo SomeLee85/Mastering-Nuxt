@@ -14,24 +14,26 @@
       that's easier to reason about and refactor.
     </div>
     <button
-      class="bg-yellow-400 hover:bg-yellow-500 transition px-9 py-4 w-80 text-xl font-bold rounded-lg"
+      class="bg-yellow-300 hover:bg-yellow-400 transition px-9 py-4 w-80 text-xl font-bold rounded-lg"
       @click="() => (showPayment = !showPayment)"
     >
       Buy Now
     </button>
-    <p class="text-lg font-bold">or</p>
-    <button
-      class="text-lg bg-green-600 hover:bg-green-700 rounded-lg py-4 px-9 py-5 w-70 font-bold text-black"
-      @click="login"
+    <p
+      class="text-lg font-bold"
+      style="margin-top: 20px; margin-bottom: -20px"
     >
-      Login with GitHub
-      <img
-        :src="logo"
-        width="40"
-        height="40"
-        style="float: right"
-      />
-    </button>
+      or
+    </p>
+    <p class="items-center">
+      <GitHubLogin />
+    </p>
+    <NuxtLink
+      class="hover:text-blue-500 hover:underline"
+      :to="'/course/chapter/1-chapter-1/lesson/1-introduction-to-typescript-with-vue-js-3'"
+    >
+      View the First Chapter for free!</NuxtLink
+    >
   </Section>
   <Section title="What You'll Learn">
     <ul class="text-2xl font-medium space-y-6">
@@ -96,12 +98,8 @@ import screen2 from '~/assets/images/screen2.png';
 import screen3 from '~/assets/images/screen3.png';
 import screen4 from '~/assets/images/screen4.png';
 import screen5 from '~/assets/images/screen5.png';
-import logo from '~/assets/images/ghub-logo2.png';
 
 const course = await useCourse();
-const { query } = useRoute();
-const supabase = useSupabaseClient();
-const user = useSupabaseUser();
 
 const learningOutcomes = [
   'Hands-On Experience with the Benefits of TypeScript',
@@ -121,28 +119,5 @@ definePageMeta({
   layout: false,
 });
 
-watchEffect(async () => {
-  if (user.value) {
-    await navigateTo(query.redirectTo as string, {
-      replace: true,
-    });
-  }
-});
-//query comes from middleware auth
-const login = async () => {
-  const queryParams =
-    query.redirectTo !== undefined
-      ? `?redirectTo=${query.redirectTo}`
-      : '';
-  const redirectTo = `/linkWithPurchase/${paymentIntentId.value}`;
-  const { error } = await supabase.auth.signInWithOAuth({
-    provider: 'github',
-    options: { redirectTo },
-  });
-
-  if (error) {
-    console.error(error);
-  }
-};
 const showPayment = ref(false);
 </script>

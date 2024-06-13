@@ -37,6 +37,7 @@
               required
             />
           </div>
+
           <div id="card-element">
             <!-- Elements will create input elements here -->
           </div>
@@ -55,12 +56,13 @@
             v-if="processingPayment"
             class="h-5 w-5"
           />
-          <div v-else>Pay $74.89</div>
+          <div v-else>Pay $97</div>
         </button>
       </form>
     </div>
   </Modal>
 </template>
+
 <script setup>
 const course = await useCourse();
 const config = useRuntimeConfig();
@@ -70,8 +72,6 @@ const email = ref('');
 const processingPayment = ref(false);
 const success = ref(false);
 const paymentIntentId = ref(null);
-const supabase = useSupabaseClient();
-const { query } = useRoute();
 
 const formStyle = {
   base: {
@@ -82,10 +82,12 @@ const formStyle = {
     },
   },
 };
+
 const elements = computed(() => stripe.value?.elements());
 
 const setupStripe = () => {
   stripe.value = Stripe(config.public.stripeKey);
+
   if (!card.value && elements.value) {
     card.value = elements.value.create('card', {
       style: formStyle,
@@ -145,15 +147,7 @@ const login = async () => {
     return;
   }
   const redirectTo = `/linkWithPurchase/${paymentIntentId.value}`;
-  const { error } = await supabase.auth.signInWithOAuth({
-    provider: 'github',
-    options: { redirectTo },
-  });
-
-  if (error) {
-    console.error(error);
-  }
-  await navigateTo(`/course?redirectTo=${redirectTo}`);
+  await navigateTo(`/GitHubLogin?redirectTo=${redirectTo}`);
 };
 
 useHead({
