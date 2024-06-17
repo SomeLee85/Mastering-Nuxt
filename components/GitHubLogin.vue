@@ -1,16 +1,14 @@
 <template>
-  <div class="prose w-full max-w-2xl h-9">
-    <span>
-      <button
-        id="button"
-        class="rounded-lg hover:bg-green-700"
-        style="float: left"
-        @click="login"
-      >
-        <p style="float: left">Log in with Github</p>
-      </button>
-    </span>
-  </div>
+  <span>
+    <button
+      id="button"
+      class="rounded-lg hover:bg-green-700"
+      style="float: left"
+      @click="login"
+    >
+      Log in with Github
+    </button>
+  </span>
 </template>
 
 <style scoped>

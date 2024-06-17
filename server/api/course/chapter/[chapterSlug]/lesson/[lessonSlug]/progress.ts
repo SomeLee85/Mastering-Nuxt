@@ -40,7 +40,7 @@ export default defineEventHandler(async (event) => {
   const {
     user: { email: userEmail },
   } = event.context;
-  //@ts-ignore
+
   return prisma.lessonProgress.upsert({
     where: {
       lessonId_userEmail: {

@@ -147,7 +147,7 @@ const login = async () => {
     return;
   }
   const redirectTo = `/linkWithPurchase/${paymentIntentId.value}`;
-  await navigateTo(`/GitHubLogin?redirectTo=${redirectTo}`);
+  await navigateTo(`/linkAccount?redirectTo=${redirectTo}`);
 };
 
 useHead({

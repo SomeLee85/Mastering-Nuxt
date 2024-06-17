@@ -1,4 +1,5 @@
 <template>
+  <NavBar />
   <Section class="space-y-12 flex flex-col items-center">
     <h1 class="text-7xl font-black text-blue-500 m-0 p-0">
       {{ course.title }}
@@ -25,16 +26,15 @@
     >
       or
     </p>
-    <p class="items-center">
-      <GitHubLogin />
-    </p>
-    <NuxtLink
+    <GitHubLogin />
+    <a
       class="hover:text-blue-500 hover:underline"
-      :to="'/course/chapter/1-chapter-1/lesson/1-introduction-to-typescript-with-vue-js-3'"
+      :href="'/course/chapter/1-chapter-1/lesson/1-introduction-to-typescript-with-vue-js-3'"
     >
-      View the First Chapter for free!</NuxtLink
+      View the First Chapter for free!</a
     >
   </Section>
+
   <Section title="What You'll Learn">
     <ul class="text-2xl font-medium space-y-6">
       <li

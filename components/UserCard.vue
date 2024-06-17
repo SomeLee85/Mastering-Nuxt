@@ -1,10 +1,10 @@
 <template>
   <div
-    v-if="user"
-    class="rounded p-3 flex items-center space-x-3 bg-white"
+    v-if="user.isLoggedIn"
+    class="rounded p-3 flex items-center space-x-3 bg-gray-100"
   >
     <img
-      class="rounded-full w-12 h-12 border-2 border-blue-400"
+      class="rounded-full h-9 border-2 border-blue-400"
       :src="profile"
     />
     <div class="text-right">
@@ -12,6 +12,9 @@
       <button
         class="text-sm underline text-slate-500 hover:text-blue-500"
         @click="logout"
+        @input="
+          () => $emit('update:modelValue', !modelValue)
+        "
       >
         Log out
       </button>
@@ -19,21 +22,25 @@
   </div>
   <div
     v-else
-    class="rounded p-3 flex items-center space-x-3 bg-white"
+    class="rounded p-2 flex items-center space-x-3 bg-white"
   >
     <div class="text-right">
       <button
         class="text-sm underline text-slate-500 hover:text-blue-500"
         @click="login"
+        @input="
+          () => $emit('update:modelValue', !modelValue)
+        "
       >
-        Login with GitHub
+        Log in
       </button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-const user = useSupabaseUser();
+import { useUserStore } from '@/stores/user';
+const user = useUserStore();
 const supabase = useSupabaseClient();
 
 const logout = async () => {
@@ -48,27 +55,28 @@ const logout = async () => {
 const login = async () => {
   const { error } = await supabase.auth.signInWithOAuth({
     provider: 'github',
+    options: {
+      redirectTo: window.location.href,
+    },
   });
   if (error) {
     console.error(error);
   }
-  console.log(useState);
 };
 
-supabase.auth.onAuthStateChange((_, _session) => {
-  if (_session?.access_token) {
-    const accessToken = useCookie('sb-access-token');
-    const refreshToken = useCookie('sb-refresh-token');
-    accessToken.value = _session?.access_token ?? null;
-    refreshToken.value = _session?.refresh_token ?? null;
-  }
-  console.log(_session);
+defineProps({
+  modelValue: {
+    type: Boolean,
+    default: false,
+  },
 });
 
+defineEmits(['update:modelValue']);
+
 const name = computed(
-  () => user.value?.user_metadata.full_name
+  () => user?.user?.user_metadata?.full_name
 );
 const profile = computed(
-  () => user.value?.user_metadata.avatar_url
+  () => user?.user?.user_metadata?.avatar_url
 );
 </script>

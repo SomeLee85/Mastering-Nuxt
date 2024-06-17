@@ -27,7 +27,7 @@ export default defineNuxtConfig({
   ],
   supabase: {
     redirectOptions: {
-      login: '/course',
+      login: '/login',
       callback: '/confirm',
       exclude: ['/*'], // We implement our own auth behaviour in the auth middleware
     },

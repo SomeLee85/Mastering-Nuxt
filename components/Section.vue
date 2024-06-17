@@ -31,7 +31,7 @@ export default {
 </script>
 
 <style>
-.section:nth-of-type(even) {
+.section:nth-of-type(odd) {
   @apply bg-blue-500 text-white;
 }
 </style>

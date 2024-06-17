@@ -8,7 +8,6 @@
           <span class="font-bold">{{ course.title }}</span>
         </span>
       </h1>
-      <UserCard />
     </div>
 
     <div class="flex flex-row justify-center flex-grow">

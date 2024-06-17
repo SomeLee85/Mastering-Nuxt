@@ -9,9 +9,12 @@ watchEffect(async () => {
         headers: useRequestHeaders(['cookie']),
       }
     );
-    await navigateTo('/course', {
-      replace: true,
-    });
+    await navigateTo(
+      '/course/chapter/1-chapter-1/lesson/1-introduction-to-typescript-with-vue-js-3',
+      {
+        replace: true,
+      }
+    );
   }
 });
 const render = () => {};
