@@ -98,6 +98,7 @@ import screen2 from '~/assets/images/screen2.png';
 import screen3 from '~/assets/images/screen3.png';
 import screen4 from '~/assets/images/screen4.png';
 import screen5 from '~/assets/images/screen5.png';
+import auth from '~/middleware/auth';
 
 const course = await useCourse();
 

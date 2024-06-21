@@ -1,5 +1,6 @@
 import vsharp from 'vite-plugin-vsharp';
 
+// @ts-ignore
 export default defineNuxtConfig({
   runtimeConfig: {
     stripeSecret: '',
@@ -8,12 +9,15 @@ export default defineNuxtConfig({
       stripeKey: '',
     },
   },
-
-  nitro: {
-    prerender: {
-      routes: ['/'],
-    },
+  typescript: {
+    typeCheck: false,
   },
+
+  // nitro: {
+  //   prerender: {
+  //     routes: ['/'],
+  //   },
+  // },
 
   vite: {
     plugins: [vsharp()],
@@ -22,14 +26,6 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
     '@vueuse/nuxt',
-    '@nuxtjs/supabase',
     '@pinia/nuxt',
   ],
-  supabase: {
-    redirectOptions: {
-      login: '/login',
-      callback: '/confirm',
-      exclude: ['/*'], // We implement our own auth behaviour in the auth middleware
-    },
-  },
 });

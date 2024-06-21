@@ -1,4 +1,3 @@
-import { defineStore } from 'pinia';
 import type { CourseProgress } from '~/types/course';
 
 export const useCourseProgress = defineStore(
@@ -71,8 +70,8 @@ export const useCourseProgress = defineStore(
       lesson: string
     ) => {
       // If there's no user we can't update the progress
-      const user = useSupabaseUser();
-      if (!user.value) return;
+      // const user = useSupabaseUser();
+      // if (!user.value) return;
 
       // Grab chapter and lesson slugs from the route if they're not provided
       if (!chapter || !lesson) {
@@ -95,7 +94,7 @@ export const useCourseProgress = defineStore(
 
       // Update the progress in the DB
       try {
-        await $fetch(
+        await usePugFetch(
           `/api/course/chapter/${chapter}/lesson/${lesson}/progress`,
           {
             method: 'POST',

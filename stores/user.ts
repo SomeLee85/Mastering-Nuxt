@@ -1,3 +1,4 @@
+import { getAuth } from 'firebase/auth';
 import { defineStore } from 'pinia';
 
 // You can name the return value of `defineStore()` anything you want,

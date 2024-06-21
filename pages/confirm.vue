@@ -3,7 +3,9 @@
 </template>
 
 <script setup lang="ts">
-const user = useSupabaseUser();
+import { getIdToken } from 'firebase/auth';
+
+const user = getIdToken();
 const { query } = useRoute();
 
 watch(

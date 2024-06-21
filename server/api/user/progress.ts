@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import protectRoute from '~/server/utils/protectRoute';
+// import protectRoute from '~/server/utils/protectRoute';
 import type {
   ChapterOutline,
   LessonOutline,
@@ -13,12 +13,14 @@ const prisma = new PrismaClient();
 
 export default defineEventHandler(async (event) => {
   // Throw a 401 if there is no user logged in.
-  protectRoute(event);
+  // protectRoute(event);
+  console.log('user/progress is being called here.');
+  // Get user email
+  const userEmail: any = event.context.user.email;
+  // const {
+  //   user: { email: userEmail },
 
-  // Get user email from the supabase user if there is one.
-  const {
-    user: { email: userEmail },
-  } = event.context;
+  // } = event.context;
 
   // Get the progress from the DB
   const userProgress = await prisma.lessonProgress.findMany(

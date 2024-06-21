@@ -1,6 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import protectRoute from '~/server/utils/protectRoute';
-
+// import protectRoute from '~/server/utils/protectRoute';
 const prisma = new PrismaClient();
 
 // Endpoint that updates the progress of a lesson
@@ -9,7 +8,7 @@ export default defineEventHandler(async (event) => {
   assertMethod(event, ['PUT', 'PATCH', 'POST']);
 
   // Throw a 401 if there is no user logged in.
-  protectRoute(event);
+  // protectRoute(event);
 
   // Get the route params
   //@ts-ignore
@@ -36,10 +35,7 @@ export default defineEventHandler(async (event) => {
   // Get the completed value from the request body and update progress in DB
   // Select based on the chapter and lesson slugs
   const { completed } = await readBody(event);
-  // Get user email from the supabase user if there is one.
-  const {
-    user: { email: userEmail },
-  } = event.context;
+  const userEmail: any = event.context.user.email;
 
   return prisma.lessonProgress.upsert({
     where: {

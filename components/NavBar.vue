@@ -15,7 +15,7 @@
       <img
         :src="homeIcon"
         style="
-          width: 25px;
+          width: 30px;
           height: 25px;
           float: left;
           transform: translate(-5px, -4px);
@@ -25,10 +25,11 @@
     </a>
     <a
       class="hover:bg-gray-600"
-      href="/course"
+      href="/course/chapter/1-chapter-1/lesson/1-introduction-to-typescript-with-vue-js-3"
       style="padding: 20px"
-      >Course Page</a
-    ><a
+      >Course
+    </a>
+    <a
       class="hover:bg-gray-600"
       href="/FAQ"
       style="padding: 20px"
@@ -39,17 +40,23 @@
       style="padding: 20px"
       >About</a
     >
-    <div v-if="user.isLoggedIn" style="padding-left: 79.4%">
+    <div v-if="user.isLoggedIn" style="padding-left: 81.1%">
       <UserCard />
     </div>
 
-    <div v-else style="padding-left: 81.8%">
+    <div v-else style="padding-left: 83.4%">
       <UserCard />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import {
+  CDropdown,
+  CDropdownItem,
+  CDropdownMenu,
+  CDropdownToggle,
+} from '@coreui/vue';
 import homeIcon from '~/assets/images/home-icon.png';
 import { useUserStore } from '@/stores/user';
 const user = useUserStore();

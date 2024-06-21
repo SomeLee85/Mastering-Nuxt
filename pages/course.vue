@@ -23,7 +23,7 @@
           <h4 class="flex justify-between items-center">
             {{ chapter.title }}
             <span
-              v-if="percentageCompleted && user"
+              v-if="percentageCompleted"
               class="text-emerald-500 text-sm"
             >
               {{ percentageCompleted.chapters[index] }}%
@@ -82,7 +82,7 @@
 <script setup>
 import { useCourseProgress } from '~/stores/courseProgress';
 import { storeToRefs } from 'pinia';
-const user = useSupabaseUser();
+// const user = useSupabaseUser();
 const course = await useCourse();
 const firstLesson = await useFirstLesson();
 

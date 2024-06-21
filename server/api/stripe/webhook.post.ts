@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
       STRIPE_WEBHOOK_SECRET
     );
   } catch (error) {
-    console.error(error);
+    console.error('Invalid signature', error);
     throw createError({
       statusCode: 400,
       statusMessage: 'Invalid signature',
@@ -59,7 +59,7 @@ async function handlePaymentIntentSucceeded(
       },
     });
   } catch (error) {
-    console.error(error);
+    console.error('Invalid signatured df', error);
     throw createError({
       statusCode: 500,
       statusMessage: 'Error verifying purchase',
@@ -78,7 +78,7 @@ async function handlePaymentIntentFailed(
       },
     });
   } catch (error) {
-    console.error(error);
+    console.error('Invalid signature sdfsdfsd df', error);
     throw createError({
       statusCode: 500,
       statusMessage: 'Error removing purchase',

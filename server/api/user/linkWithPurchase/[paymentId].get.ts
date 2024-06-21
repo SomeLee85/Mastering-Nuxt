@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
       },
     });
   } catch (error) {
-    console.error(error);
+    console.error('Invalid signature', error);
     throw createError({
       statusCode: 500,
       statusMessage: 'Error linking course purchase',

@@ -35,9 +35,11 @@
 </template>
 
 <script setup>
+import { getIdToken } from 'firebase/auth';
 import { useCourseProgress } from '~/stores/courseProgress.ts';
 const course = await useCourse();
-const user = useSupabaseUser();
+// const user = useSupabaseUser();
+const user = getIdToken;
 const route = useRoute();
 const { chapterSlug, lessonSlug } = route.params;
 const lesson = await useLesson(chapterSlug, lessonSlug);
@@ -83,7 +85,7 @@ definePageMeta({
 
 // Check if the current lesson is completed
 const isCompleted = computed(() => {
-  return store.progress?.[chapterSlug]?.[lessonSlug] || 0;
+  return store.progress?.[chapterSlug]?.[lessonSlug];
 });
 
 const chapter = computed(() => {
