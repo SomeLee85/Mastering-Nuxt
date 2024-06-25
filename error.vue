@@ -14,15 +14,12 @@
         <p>
           <strong>{{ error.message }}</strong>
         </p>
-        <p>
-          Go to the
-          <a
-            class="hover:cursor-pointer"
-            @click="handleError"
-          >
-            first lesson.
-          </a>
-        </p>
+        <a
+          class="hover:cursor-pointer"
+          @click="handleError"
+        >
+          Return to Home
+        </a>
       </div>
     </div>
   </NuxtLayout>
@@ -32,8 +29,7 @@
 const error = useError();
 const handleError = () => {
   clearError({
-    redirect:
-      '/course/chapter/1-chapter-1/lesson/1-introduction-to-typescript-with-vue-js-3',
+    redirect: '/',
   });
 };
 </script>

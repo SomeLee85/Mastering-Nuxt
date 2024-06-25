@@ -8,15 +8,18 @@ import type {
   CourseProgress,
   ChapterProgress,
 } from '~/types/course';
+import { useUserStore } from '~/stores/user';
 
 const prisma = new PrismaClient();
+const user = useUserStore;
 
 export default defineEventHandler(async (event) => {
   // Throw a 401 if there is no user logged in.
   // protectRoute(event);
   console.log('user/progress is being called here.');
   // Get user email
-  const userEmail: any = event.context.user.email;
+  const userEmail = user.email;
+
   // const {
   //   user: { email: userEmail },
 

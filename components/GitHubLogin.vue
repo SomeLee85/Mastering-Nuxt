@@ -42,7 +42,7 @@ import {
 const nuxtApp = useNuxtApp();
 const auth = nuxtApp.$auth;
 const provider = new GithubAuthProvider();
-
+const { query } = useRoute();
 const login = async () => {
   //@ts-ignore
   signInWithPopup(auth, provider)
@@ -50,9 +50,15 @@ const login = async () => {
       const credential =
         GithubAuthProvider.credentialFromResult(result);
       const token = credential?.accessToken;
-      navigateTo(
-        '/course/chapter/1-chapter-1/lesson/1-introduction-to-typescript-with-vue-js-3'
-      );
+      if (query.redirectTo != null) {
+        navigateTo(query.redirectTo as string, {
+          replace: true,
+        });
+      } else {
+        navigateTo(
+          '/course/chapter/1-chapter-1/lesson/1-introduction-to-typescript-with-vue-js-3'
+        );
+      }
     })
     .catch((error) => {
       const errorCode = error.code;
@@ -62,28 +68,4 @@ const login = async () => {
         GithubAuthProvider.credentialFromError(error);
     });
 };
-// const course = await useCourse();
-// const { query } = useRoute();
-// const database = getDatabase();
-// const supabase = useSupabaseClient();
-// const user = useSupabaseUser();
-
-//Checks if a user is logged in and redirects route to query
-// watchEffect(async () => {
-//   if (user.value) {
-//     await navigateTo(query.redirectTo as string, {
-//       replace: true,
-//     });
-//   }
-// });
-
-// const queryParams =
-//   query.redirectTo !== undefined
-//     ? `?redirectTo=${query.redirectTo}`
-//     : '';
-// const redirectTo = `${window.location.origin}/confirm${queryParams}`;
-// const { error } = await database.signInWithPopup({
-//   provider: 'github',
-//   options: { redirectTo },
-// });
 </script>

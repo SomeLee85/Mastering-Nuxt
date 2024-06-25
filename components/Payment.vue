@@ -22,8 +22,21 @@
           Buying {{ course.title }}
         </h2>
         <div
-          class="mt-8 text-base width bg-white py-6 px-8 rounded shadow-md"
+          class="mt-8 text-base width bg-white py-8 px-6 rounded shadow-md"
         >
+          <div
+            class="flex justify-between items-center mb-4"
+          >
+            <label class="font-bold">Username</label>
+            <input
+              class="input ml-6 focus:outline-none text-left w-full"
+              type="username"
+              autocomplete="username"
+              v-model="username"
+              placeholder="JohnSmith89"
+              required
+            />
+          </div>
           <div
             class="w-full flex justify-between items-center mb-8"
           >
@@ -56,7 +69,7 @@
             v-if="processingPayment"
             class="h-5 w-5"
           />
-          <div v-else>Pay $97</div>
+          <div v-else>Pay $74.89</div>
         </button>
       </form>
     </div>
@@ -69,6 +82,7 @@ const config = useRuntimeConfig();
 const stripe = ref(null);
 const card = ref(null);
 const email = ref('');
+const username = ref('');
 const processingPayment = ref(false);
 const success = ref(false);
 const paymentIntentId = ref(null);
@@ -97,7 +111,7 @@ const setupStripe = () => {
 };
 
 const handleSubmit = async () => {
-  if (email.value === '') {
+  if (email.value === '' || username.value === '') {
     return;
   }
 
@@ -112,6 +126,7 @@ const handleSubmit = async () => {
         method: 'POST',
         body: {
           email: email.value,
+          username: username.value,
         },
       }
     );

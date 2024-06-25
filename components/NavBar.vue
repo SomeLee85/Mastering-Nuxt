@@ -51,12 +51,6 @@
 </template>
 
 <script setup lang="ts">
-import {
-  CDropdown,
-  CDropdownItem,
-  CDropdownMenu,
-  CDropdownToggle,
-} from '@coreui/vue';
 import homeIcon from '~/assets/images/home-icon.png';
 import { useUserStore } from '@/stores/user';
 const user = useUserStore();

@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { getDatabase } from 'firebase-admin/database';
 import stripe from './stripe';
 
 type PaymentIntent = {
@@ -12,7 +13,7 @@ const STRIPE_WEBHOOK_SECRET =
 export default defineEventHandler(async (event) => {
   const signature = getHeader(event, 'stripe-signature');
   const body = await readRawBody(event);
-
+  const rBody = await readBody(event);
   // Verify the webhook signature
   let stripeEvent;
   try {
@@ -32,13 +33,15 @@ export default defineEventHandler(async (event) => {
   //if-else checks for payment success from stripes webhook data
   if (stripeEvent.type === 'payment_intent.succeeded') {
     await handlePaymentIntentSucceeded(
-      stripeEvent.data.object
+      stripeEvent.data.object,
+      rBody.data.object.receipt_email
     );
   } else if (
     stripeEvent.type === 'payment_intent.payment_failed'
   ) {
     await handlePaymentIntentFailed(
-      stripeEvent.data.object
+      stripeEvent.data.object,
+      rBody.data.object.receipt_email
     );
   }
 
@@ -46,16 +49,39 @@ export default defineEventHandler(async (event) => {
 });
 
 async function handlePaymentIntentSucceeded(
-  paymentIntent: PaymentIntent
+  paymentIntent: PaymentIntent,
+  email: string
 ) {
   // Verify the related course purchase
   try {
-    await prisma.coursePurchase.update({
-      where: {
-        paymentId: paymentIntent.id,
-      },
-      data: {
-        verified: true,
+    const db = getDatabase();
+    var username = '';
+    const ref = db.ref('/users');
+
+    const data = await ref.get();
+    data.forEach((d) => {
+      const val = d.val();
+      if (val.userEmail === email) {
+        username = d.key;
+      }
+    });
+
+    const userRef = ref.child('/' + username);
+    userRef.update({
+      paymentId: paymentIntent.id,
+      verified: true,
+      lessonProgress: {
+        1: false,
+        2: false,
+        3: false,
+        4: false,
+        5: false,
+        6: false,
+        7: false,
+        8: false,
+        9: false,
+        10: false,
+        11: false,
       },
     });
   } catch (error) {
@@ -68,17 +94,27 @@ async function handlePaymentIntentSucceeded(
 }
 
 async function handlePaymentIntentFailed(
-  paymentIntent: PaymentIntent
+  paymentIntent: PaymentIntent,
+  email: string
 ) {
   // Clean up the course purchase
   try {
-    await prisma.coursePurchase.delete({
-      where: {
-        paymentId: paymentIntent.id,
-      },
+    const db = getDatabase();
+    var username = '';
+    const ref = db.ref('/users');
+
+    const data = await ref.get();
+    data.forEach((d) => {
+      const val = d.val();
+      if (val.userEmail === email) {
+        username = d.key;
+      }
     });
+
+    const userRef = ref.child('/' + username);
+    userRef.remove();
   } catch (error) {
-    console.error('Invalid signature sdfsdfsd df', error);
+    console.error('Invalid signature', error);
     throw createError({
       statusCode: 500,
       statusMessage: 'Error removing purchase',

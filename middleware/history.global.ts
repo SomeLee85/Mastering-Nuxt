@@ -1,4 +1,8 @@
 export default defineNuxtRouteMiddleware((to, from) => {
-  const navigationHistory = useLocalStorage("history", [] as string[]);
+  console.log('CS: GMiddleware called.');
+  const navigationHistory = useLocalStorage(
+    'history',
+    [] as string[]
+  );
   navigationHistory.value.push(to.path);
 });

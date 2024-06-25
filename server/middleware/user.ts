@@ -6,6 +6,7 @@ var app: any = null;
 //creates cookies for user to allow user to refresh page
 //and still have access to the same route and database
 export default defineEventHandler(async (event) => {
+  console.log('SS: Middleware called.');
   // @ts-ignore
   const userJWT = getHeader(event, 'authorization');
   // const routeParams = getRequestURL(event);

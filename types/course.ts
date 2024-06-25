@@ -1,4 +1,6 @@
 import type { Lesson } from '@prisma/client';
+import { getDatabase, ref } from 'firebase/database';
+const dbRef = ref(getDatabase());
 
 export type LessonWithPath = Lesson & {
   path: string;

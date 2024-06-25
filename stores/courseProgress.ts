@@ -69,12 +69,20 @@ export const useCourseProgress = defineStore(
       chapter: string,
       lesson: string
     ) => {
-      // If there's no user we can't update the progress
+      // ************** [NEED TO DO THIS] If there's no user we can't update the progress ********************
       // const user = useSupabaseUser();
       // if (!user.value) return;
+      const user = useUserStore;
+      if (user.email == 'undefined') {
+        console.log(
+          'cP: should be checking for user',
+          user.email
+        );
+        return;
+      }
 
-      // Grab chapter and lesson slugs from the route if they're not provided
       if (!chapter || !lesson) {
+        // Grab chapter and lesson slugs from the route if they're not provided
         const {
           params: { chapterSlug, lessonSlug },
         } = useRoute();

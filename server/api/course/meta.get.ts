@@ -9,6 +9,7 @@ const lessonSelect = Prisma.validator<Prisma.LessonArgs>()({
     number: true,
   },
 });
+
 export type LessonOutline = Prisma.LessonGetPayload<
   typeof lessonSelect
 > & {

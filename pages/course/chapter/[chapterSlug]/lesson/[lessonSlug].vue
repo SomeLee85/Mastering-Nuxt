@@ -35,11 +35,13 @@
 </template>
 
 <script setup>
-import { getIdToken } from 'firebase/auth';
+// import { getIdToken } from 'firebase/auth';
+import { useUserStore } from '@/stores/user';
 import { useCourseProgress } from '~/stores/courseProgress.ts';
 const course = await useCourse();
 // const user = useSupabaseUser();
-const user = getIdToken;
+const user = useUserStore();
+console.log('🚀 ~ user:', user);
 const route = useRoute();
 const { chapterSlug, lessonSlug } = route.params;
 const lesson = await useLesson(chapterSlug, lessonSlug);

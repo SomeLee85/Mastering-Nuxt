@@ -7,6 +7,7 @@ import {
 import { getDatabase } from 'firebase/database';
 
 export default defineNuxtRouteMiddleware(async (to) => {
+  console.log('CS: Middleware called.');
   let user2: any = useUserStore();
 
   const auth = getAuth();
@@ -33,7 +34,9 @@ export default defineNuxtRouteMiddleware(async (to) => {
       //User is signed out
       user2.isLoggedIn = false;
       console.log('This is what is redirecting');
-      return navigateTo(`/?redirectTo=${to.path}`);
+      return navigateTo(`/?redirectTo=${to.path}`, {
+        external: true,
+      });
     }
   });
 });

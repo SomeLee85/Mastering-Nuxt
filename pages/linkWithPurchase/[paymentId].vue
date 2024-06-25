@@ -1,5 +1,8 @@
 <script setup>
-const user = useSupabaseUser();
+import { useUserStore } from '@/stores/user';
+const user = useUserStore();
+console.log('🚀 ~ user:', user);
+
 watchEffect(async () => {
   if (user.value) {
     const route = useRoute();
