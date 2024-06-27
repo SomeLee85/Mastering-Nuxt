@@ -14,7 +14,7 @@
       </NuxtLink>
       <!--Provides video download link if there is one-->
       <NuxtLink
-        v-if="lesson.downloadUrl"
+        v-if="lesson?.downloadUrl"
         class="font-normal text-md text-gray-500"
         :to="lesson.downloadUrl"
       >
@@ -34,71 +34,78 @@
   </div>
 </template>
 
-<script setup>
-// import { getIdToken } from 'firebase/auth';
+<script setup lang="ts">
 import { useUserStore } from '@/stores/user';
-import { useCourseProgress } from '~/stores/courseProgress.ts';
-const course = await useCourse();
-// const user = useSupabaseUser();
-const user = useUserStore();
-console.log('🚀 ~ user:', user);
-const route = useRoute();
-const { chapterSlug, lessonSlug } = route.params;
-const lesson = await useLesson(chapterSlug, lessonSlug);
+import { useCourseProgress } from '~/stores/courseProgress';
+import {
+  getDatabase,
+  ref,
+  onValue,
+  get,
+} from 'firebase/database';
 const store = useCourseProgress();
 const { initialize, toggleComplete } = store;
-
 initialize();
+const user = useUserStore();
+
+const route = useRoute();
+const { chapterSlug, lessonSlug } = route.params;
 
 definePageMeta({
-  middleware: [
-    async function ({ params }, from) {
-      const course = await useCourse();
+  middleware: ['auth'],
+});
 
-      const chapter = course.value.chapters.find(
-        (chapter) => chapter.slug === params.chapterSlug
-      );
+const db = getDatabase();
+const titleRef = ref(db, 'title');
+const chapterRef = ref(db, 'chapters');
+const lessonsRef = ref(db, 'lessons');
 
-      if (!chapter) {
-        return abortNavigation(
-          createError({
-            statusCode: 404,
-            message: 'Chapter not found',
-          })
-        );
+let title: any;
+let lesson: any;
+let lessons: any[] = [];
+let chapters: any[] = [];
+onValue(titleRef, (snapshot) => {
+  title = snapshot.val();
+});
+
+await get(chapterRef).then((snapshot) => {
+  let index = 0;
+  snapshot.forEach((data) => {
+    if (data.val() != null) {
+      chapters.push(data.val());
+    }
+    for (
+      let i = 0;
+      i < chapters[index].lessons.length;
+      i++
+    ) {
+      if (chapters[index].lessons[i].slug === lessonSlug) {
+        lesson = chapters[index].lessons[i];
       }
+    }
+    index++;
+  });
+});
 
-      const lesson = chapter.lessons.find(
-        (lesson) => lesson.slug === params.lessonSlug
-      );
-
-      if (!lesson) {
-        return abortNavigation(
-          createError({
-            statusCode: 404,
-            message: 'Lesson not found',
-          })
-        );
-      }
-    },
-    'auth',
-  ],
+onValue(lessonsRef, (snapshot) => {
+  snapshot.forEach((data) => {
+    if (data.val() != null) {
+      lessons.push(data.val());
+    }
+  });
 });
 
 // Check if the current lesson is completed
 const isCompleted = computed(() => {
-  return store.progress?.[chapterSlug]?.[lessonSlug];
+  return store.progress?.chapterSlug?.lessonSlug;
 });
 
 const chapter = computed(() => {
-  return course.value.chapters.find(
+  return chapters.find(
     (chapter) => chapter.slug === route.params.chapterSlug
   );
 });
 
-const title = computed(() => {
-  return `${lesson.value.title} - ${course.value.title}`;
-});
 useHead({
   title,
 });

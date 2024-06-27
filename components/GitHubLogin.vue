@@ -36,7 +36,6 @@ button {
 import {
   GithubAuthProvider,
   signInWithPopup,
-  signInWithRedirect,
 } from 'firebase/auth';
 //@ts-ignore
 const nuxtApp = useNuxtApp();

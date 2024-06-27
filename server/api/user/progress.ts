@@ -1,16 +1,13 @@
 import { PrismaClient } from '@prisma/client';
 // import protectRoute from '~/server/utils/protectRoute';
-import type {
-  ChapterOutline,
-  LessonOutline,
-} from '../course/meta.get';
+import course from '../course/meta.get';
 import type {
   CourseProgress,
   ChapterProgress,
 } from '~/types/course';
 import { useUserStore } from '~/stores/user';
 
-const prisma = new PrismaClient();
+// const prisma = new PrismaClient();
 const user = useUserStore;
 
 export default defineEventHandler(async (event) => {
@@ -19,6 +16,7 @@ export default defineEventHandler(async (event) => {
   console.log('user/progress is being called here.');
   // Get user email
   const userEmail = user.email;
+  console.log('~ userEmail ~', userEmail);
 
   // const {
   //   user: { email: userEmail },
@@ -26,76 +24,76 @@ export default defineEventHandler(async (event) => {
   // } = event.context;
 
   // Get the progress from the DB
-  const userProgress = await prisma.lessonProgress.findMany(
-    {
-      where: {
-        userEmail,
-        // We only want to get the progress for the first course right now
-        Lesson: {
-          Chapter: {
-            Course: {
-              id: 1,
-            },
-          },
-        },
-      },
-      select: {
-        completed: true,
-        Lesson: {
-          select: {
-            slug: true,
-            Chapter: {
-              select: {
-                slug: true,
-              },
-            },
-          },
-        },
-      },
-    }
-  );
+  // const userProgress = await prisma.lessonProgress.findMany(
+  //   {
+  //     where: {
+  //       userEmail,
+  //       // We only want to get the progress for the first course right now
+  //       Lesson: {
+  //         Chapter: {
+  //           Course: {
+  //             id: 1,
+  //           },
+  //         },
+  //       },
+  //     },
+  //     select: {
+  //       completed: true,
+  //       Lesson: {
+  //         select: {
+  //           slug: true,
+  //           Chapter: {
+  //             select: {
+  //               slug: true,
+  //             },
+  //           },
+  //         },
+  //       },
+  //     },
+  //   }
+  // );
 
-  // Get course outline from meta endpoint
-  const courseOutline = await $fetch('/api/course/meta');
+  // // Get course outline from meta endpoint
+  // const courseOutline = await $fetch('/api/course/meta');
 
-  if (!courseOutline) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: 'Course outline not found',
-    });
-  }
+  // if (!courseOutline) {
+  //   throw createError({
+  //     statusCode: 404,
+  //     statusMessage: 'Course outline not found',
+  //   });
+  // }
 
   // Use the course outline and user progress to create a nested object
   // with the progress for each lesson
-  const progress = courseOutline.chapters.reduce(
-    (
-      courseProgress: CourseProgress,
-      chapter: ChapterOutline
-    ) => {
-      // Collect the progress for each chapter in the course
-      courseProgress[chapter.slug] = chapter.lessons.reduce(
-        (
-          chapterProgress: ChapterProgress,
-          lesson: LessonOutline
-        ) => {
-          // Collect the progress for each lesson in the chapter
-          chapterProgress[lesson.slug] =
-            userProgress.find(
-              (progress) =>
-                progress.Lesson.slug === lesson.slug &&
-                progress.Lesson.Chapter.slug ===
-                  chapter.slug
-            )?.completed || false;
+  // const progress = courseOutline.chapters.reduce(
+  //   (
+  //     courseProgress: CourseProgress,
+  //     chapter: ChapterOutline
+  //   ) => {
+  //     // Collect the progress for each chapter in the course
+  //     courseProgress[chapter.slug] = chapter.lessons.reduce(
+  //       (
+  //         chapterProgress: ChapterProgress,
+  //         lesson: LessonOutline
+  //       ) => {
+  //         // Collect the progress for each lesson in the chapter
+  //         chapterProgress[lesson.slug] =
+  //           userProgress.find(
+  //             (progress) =>
+  //               progress.Lesson.slug === lesson.slug &&
+  //               progress.Lesson.Chapter.slug ===
+  //                 chapter.slug
+  //           )?.completed || false;
 
-          return chapterProgress;
-        },
-        {}
-      );
+  //         return chapterProgress;
+  //       },
+  //       {}
+  //     );
 
-      return courseProgress;
-    },
-    {}
-  );
+  //     return courseProgress;
+  //   },
+  //   {}
+  // );
 
-  return progress;
+  // return progress;
 });

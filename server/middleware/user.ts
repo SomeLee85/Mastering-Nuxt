@@ -1,4 +1,3 @@
-import { useRoute } from 'vue-router';
 import { getUser } from '../api/utils/firebase-helper';
 
 var app: any = null;
@@ -29,7 +28,6 @@ export default defineEventHandler(async (event) => {
   // See https://github.com/nuxt-modules/supabase/issues/238
   if (userJWT) {
     const user = await getUser(userJWT);
-
     if (user) {
       event.context.user = user;
       // } else {

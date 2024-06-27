@@ -2,7 +2,7 @@
   <NavBar />
   <Section class="space-y-12 flex flex-col items-center">
     <h1 class="text-7xl font-black text-blue-500 m-0 p-0">
-      {{ course.title }}
+      {{ title }}
     </h1>
     <img
       :src="screenshots[2]"
@@ -16,7 +16,7 @@
     </div>
     <button
       class="bg-yellow-300 hover:bg-yellow-400 transition px-9 py-4 w-80 text-xl font-bold rounded-lg"
-      @click="() => (showPayment = !showPayment)"
+      @click="showPayment = !showPayment"
     >
       Buy Now
     </button>
@@ -57,22 +57,20 @@
     </div>
   </Section>
   <Section title="Course Outline">
-    <!-- Get course outline from course meta data  -->
+    <!-- Get course outline from database  -->
     <ul class="text-2xl font-medium space-y-16">
-      <li
-        v-for="(chapter, index) in course.chapters"
-        :key="chapter.slug"
-        class="relative"
-      >
+      <li v-for="(chapter, index) in chapters">
         <Badge>
           {{ index + 1 }}
         </Badge>
-        {{ chapter.title }}
+        <h1 class="underline">
+          {{ chapters[index].title }}
+        </h1>
 
         <ul class="mt-4 space-y-2">
           <li
-            v-for="lesson in chapter.lessons"
-            :key="`${chapter.slug}-${lesson.slug}`"
+            v-for="lesson in chapters[index].lessons"
+            :key="`${chapters[index].slug}-${lesson.slug}`"
             class="left-8 relative flex items-center space-y-2"
           >
             <Badge color="bg-blue-400">
@@ -98,9 +96,29 @@ import screen2 from '~/assets/images/screen2.png';
 import screen3 from '~/assets/images/screen3.png';
 import screen4 from '~/assets/images/screen4.png';
 import screen5 from '~/assets/images/screen5.png';
-import auth from '~/middleware/auth';
 
-const course = await useCourse();
+import {
+  getDatabase,
+  get,
+  ref as fbRef,
+} from 'firebase/database';
+
+const db = getDatabase();
+const titleRef = fbRef(db, 'title');
+const chapterRef = fbRef(db, 'chapters');
+
+const title = await get(titleRef).then((snapshot) =>
+  snapshot.val()
+);
+const chapters = await get(chapterRef).then((snapshot) => {
+  let _chapters: any[] = [];
+  snapshot.forEach((data) => {
+    if (data.val() != null) {
+      _chapters.push(data.val());
+    }
+  });
+  return _chapters;
+});
 
 const learningOutcomes = [
   'Hands-On Experience with the Benefits of TypeScript',

@@ -5,7 +5,7 @@
     >
       <h1 class="text-3xl">
         <span class="font-medium text-green-800">
-          <span class="font-bold">{{ course.title }}</span>
+          <span class="font-bold">{{ title }}</span>
         </span>
       </h1>
     </div>
@@ -17,11 +17,11 @@
         <h3>Chapters</h3>
         <div
           class="space-y-1 mb-4 flex flex-col"
-          v-for="(chapter, index) in course.chapters"
-          :key="chapter.slug"
+          v-for="(chapter, index) in chapters"
+          :key="chapters[index].slug"
         >
           <h4 class="flex justify-between items-center">
-            {{ chapter.title }}
+            {{ chapters[index].title }}
             <span
               v-if="percentageCompleted"
               class="text-emerald-500 text-sm"
@@ -31,20 +31,22 @@
           </h4>
           <NuxtLink
             v-for="(lesson, index) in chapter.lessons"
-            :key="lesson.slug"
+            :key="chapter.lessons[index].slug"
             class="flex flex-row space-x-1 no-underline prose-sm font-normal py-1 px-4 -mx-4"
-            :to="lesson.path"
+            :to="chapter.lessons[index].path"
             :class="{
               'text-blue-500':
-                lesson.path === $route.fullPath,
+                chapter.lessons[index].path ===
+                $route.fullPath,
               'text-gray-600':
-                lesson.path !== $route.fullPath,
+                chapter.lessons[index].path !==
+                $route.fullPath,
             }"
           >
             <span class="text-gray-500"
               >{{ index + 1 }}.</span
             >
-            <span>{{ lesson.title }}</span>
+            <span>{{ chapter.lessons[index].title }}</span>
           </NuxtLink>
         </div>
         <div
@@ -79,20 +81,42 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import {
+  getDatabase,
+  ref,
+  onValue,
+  get,
+} from 'firebase/database';
 import { useCourseProgress } from '~/stores/courseProgress';
-import { storeToRefs } from 'pinia';
-// const user = useSupabaseUser();
-const course = await useCourse();
-const firstLesson = await useFirstLesson();
 
 // Get chapter completion percentages
+
+const db = getDatabase();
+const titleRef = ref(db, 'title');
+const chapterRef = ref(db, 'chapters');
+
+let title: any;
+let chapters: any[] = [];
+onValue(titleRef, (snapshot) => {
+  title = snapshot.val();
+});
+
+await get(chapterRef).then((snapshot) => {
+  snapshot.forEach((data) => {
+    if (data.val() != null) {
+      chapters.push(data.val());
+    }
+  });
+});
 const { percentageCompleted } = storeToRefs(
   useCourseProgress()
 );
 
-const resetError = async (error) => {
-  await navigateTo(firstLesson.path);
+const resetError = async (error: { value: null }) => {
+  await navigateTo(
+    '/course/chapter/1-chapter-1/lesson/1-introduction-to-typescript-with-vue-js-3'
+  );
   error.value = null;
 };
 </script>

@@ -70,17 +70,12 @@ export const useCourseProgress = defineStore(
       lesson: string
     ) => {
       // ************** [NEED TO DO THIS] If there's no user we can't update the progress ********************
-      // const user = useSupabaseUser();
-      // if (!user.value) return;
       const user = useUserStore;
-      if (user.email == 'undefined') {
-        console.log(
-          'cP: should be checking for user',
-          user.email
-        );
-        return;
-      }
-
+      if (user.email === 'undefined') return;
+      console.log(
+        'cP: should be checking for user',
+        user.email
+      );
       if (!chapter || !lesson) {
         // Grab chapter and lesson slugs from the route if they're not provided
         const {
@@ -102,7 +97,7 @@ export const useCourseProgress = defineStore(
 
       // Update the progress in the DB
       try {
-        await usePugFetch(
+        await $fetch(
           `/api/course/chapter/${chapter}/lesson/${lesson}/progress`,
           {
             method: 'POST',

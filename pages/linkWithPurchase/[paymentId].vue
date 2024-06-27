@@ -1,7 +1,7 @@
 <script setup>
 import { useUserStore } from '@/stores/user';
 const user = useUserStore();
-console.log('🚀 ~ user:', user);
+// console.log('🚀 ~ user:', user);
 
 watchEffect(async () => {
   if (user.value) {
