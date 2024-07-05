@@ -12,7 +12,7 @@
       </div>
       <div class="prose mt-5">
         <p>
-          <strong>{{ error.message }}</strong>
+          <strong>{{ error }}</strong>
         </p>
         <a
           class="hover:cursor-pointer"

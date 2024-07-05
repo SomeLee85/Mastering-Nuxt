@@ -10,47 +10,33 @@
         <h2 class="text-xl font-bold">
           Thanks for buying the course!
         </h2>
-        <button
+        <a
+          class="hover:underline hover:text-blue-500"
+          href="/course/chapter/1-chapter-1/lesson/1-introduction-to-typescript-with-vue-js-3"
+          >Click here to access the course.</a
+        >
+        <!-- <GitHubLogin /> -->
+        <!-- <button
           @click="login"
           class="mt-4 w-full text-md text-black h-12 px-16 rounded focus:outline-none focus:shadow-outline flex items-center justify-center transition bg-blue-300 hover:bg-blue-200"
         >
           Login with Github to access
-        </button>
+        </button> -->
+      </div>
+      <div v-else-if="user.user === null">
+        <h1 class="text-xl" style="padding-bottom: 10%">
+          Please sign in before purchasing course.
+        </h1>
+        <GitHubLogin />
       </div>
       <form v-else @submit.prevent="handleSubmit">
         <h2 class="font-bold text-xl text-center">
-          Buying {{ course.title }}
+          Buying {{ title }} for
+          {{ user.user.email }}
         </h2>
         <div
           class="mt-8 text-base width bg-white py-8 px-6 rounded shadow-md"
         >
-          <div
-            class="flex justify-between items-center mb-4"
-          >
-            <label class="font-bold">Username</label>
-            <input
-              class="input ml-6 focus:outline-none text-left w-full"
-              type="username"
-              autocomplete="username"
-              v-model="username"
-              placeholder="JohnSmith89"
-              required
-            />
-          </div>
-          <div
-            class="w-full flex justify-between items-center mb-8"
-          >
-            <label class="font-bold"> Email </label>
-            <input
-              class="input ml-6 focus:outline-none text-left w-full"
-              type="email"
-              autocomplete="email"
-              v-model="email"
-              placeholder="your@email.com"
-              required
-            />
-          </div>
-
           <div id="card-element">
             <!-- Elements will create input elements here -->
           </div>
@@ -77,15 +63,24 @@
 </template>
 
 <script setup>
-const course = await useCourse();
+import {
+  getDatabase,
+  get,
+  ref as fbRef,
+} from 'firebase/database';
+const db = getDatabase();
+const titleRef = fbRef(db, 'title');
+const title = await get(titleRef).then((snapshot) =>
+  snapshot.val()
+);
+
 const config = useRuntimeConfig();
 const stripe = ref(null);
 const card = ref(null);
-const email = ref('');
-const username = ref('');
 const processingPayment = ref(false);
 const success = ref(false);
 const paymentIntentId = ref(null);
+const user = useUserStore();
 
 const formStyle = {
   base: {
@@ -111,7 +106,7 @@ const setupStripe = () => {
 };
 
 const handleSubmit = async () => {
-  if (email.value === '' || username.value === '') {
+  if (user.user.email === '') {
     return;
   }
 
@@ -125,8 +120,7 @@ const handleSubmit = async () => {
       {
         method: 'POST',
         body: {
-          email: email.value,
-          username: username.value,
+          email: user.user.email,
         },
       }
     );
@@ -142,7 +136,7 @@ const handleSubmit = async () => {
         payment_method: {
           card: card.value,
         },
-        receipt_email: email.value,
+        receipt_email: user.user.email,
       }
     );
 

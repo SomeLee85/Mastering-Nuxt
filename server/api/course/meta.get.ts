@@ -1,49 +1,21 @@
-// import { PrismaClient, Prisma } from '@prisma/client';
+export type LessonOutline = {
+  title: string;
+  slug: string;
+  number: number;
+  path: string;
+};
 
-// const prisma = new PrismaClient();
+export type ChapterOutline = {
+  title: string;
+  slug: string;
+  number: number;
+  lessons: LessonOutline[];
+};
 
-// const lessonSelect = Prisma.validator<Prisma.LessonArgs>()({
-//   select: {
-//     title: true,
-//     slug: true,
-//     number: true,
-//   },
-// });
-
-// export type LessonOutline = Prisma.LessonGetPayload<
-//   typeof lessonSelect
-// > & {
-//   path: string;
-// };
-
-// const chapterSelect =
-//   Prisma.validator<Prisma.ChapterArgs>()({
-//     select: {
-//       title: true,
-//       slug: true,
-//       number: true,
-//       lessons: lessonSelect,
-//     },
-//   });
-// export type ChapterOutline = Omit<
-//   Prisma.ChapterGetPayload<typeof chapterSelect>,
-//   'lessons'
-// > & {
-//   lessons: LessonOutline[];
-// };
-
-// const courseSelect = Prisma.validator<Prisma.CourseArgs>()({
-//   select: {
-//     title: true,
-//     chapters: chapterSelect,
-//   },
-// });
-// export type CourseOutline = Omit<
-//   Prisma.CourseGetPayload<typeof courseSelect>,
-//   'chapters'
-// > & {
-//   chapters: ChapterOutline[];
-// };
+export type CourseOutline = {
+  title: string;
+  chapters: ChapterOutline[];
+};
 import { getDatabase } from 'firebase-admin/database';
 import initFirebase from '../utils/firebase';
 
@@ -58,17 +30,21 @@ export default defineEventHandler(async () => {
   const chapterRef = db.ref('chapters');
   const titleRef = db.ref('title');
   let course: any[] = [];
-
+  let obj;
   const courseData = await new Promise((resolve) => {
     titleRef.on('value', (snapshot) => {
       const title = snapshot.val();
       let temp = {
         title: title,
       };
+      Object.assign(obj, temp);
+      console.log('~ object: ', JSON.stringify(obj));
       course.push(temp);
     });
     chapterRef.orderByValue().on('value', (snapshot) => {
+      Object.assign(obj.child, snapshot.key);
       snapshot.forEach((data) => {
+        Object.assign(obj.child, data.key, data.val());
         let tmp = {
           id: data.key,
           ...data.val(),
@@ -77,9 +53,14 @@ export default defineEventHandler(async () => {
       });
       resolve(course);
     });
+
+    console.log(
+      '~ object stringified value: ',
+      JSON.stringify(obj)
+    );
   });
-  console.log('~ courseData ~ ', courseData);
-  return courseData;
+  // console.log('~ courseData ~ ', courseData);
+  return course;
   // Error if there is no course
   // if (!outline) {
   //   throw createError({

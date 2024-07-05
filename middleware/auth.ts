@@ -14,23 +14,29 @@ export default defineNuxtRouteMiddleware(async (to) => {
   // const completed = false;
   // const db = getDatabase();
   onAuthStateChanged(auth, async (user) => {
+    console.log('~ auth user ~', user);
     if (user) {
       // console.log('🚀 ~ onAuthStateChanged ~ user:', user);
       //User is signed in
       user2.isLoggedIn = true;
+      user2.user = user;
       const hasAccess = await usePugFetch(
         '/api/user/hasAccess'
       );
       if (hasAccess) {
         return;
-      } else if (user2.value && !hasAccess) {
+      } else if (
+        user2.value &&
+        !hasAccess &&
+        !['/', ''].includes(to.path)
+      ) {
         // Prevent logging in with Github if user has not purchased course
         return navigateTo('/');
       }
     } else if (to.params.chapterSlug === '1-chapter-1') {
       console.log('This should be the gate');
       return;
-    } else {
+    } else if (!['/', ''].includes(to.path)) {
       //User is signed out
       user2.isLoggedIn = false;
       console.log('This is what is redirecting');

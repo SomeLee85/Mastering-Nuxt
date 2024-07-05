@@ -109,6 +109,7 @@ await get(chapterRef).then((snapshot) => {
     }
   });
 });
+
 const { percentageCompleted } = storeToRefs(
   useCourseProgress()
 );

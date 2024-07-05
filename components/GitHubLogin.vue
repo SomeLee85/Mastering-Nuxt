@@ -53,10 +53,6 @@ const login = async () => {
         navigateTo(query.redirectTo as string, {
           replace: true,
         });
-      } else {
-        navigateTo(
-          '/course/chapter/1-chapter-1/lesson/1-introduction-to-typescript-with-vue-js-3'
-        );
       }
     })
     .catch((error) => {

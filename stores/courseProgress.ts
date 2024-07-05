@@ -1,29 +1,51 @@
+import { getAuth } from 'firebase/auth';
+import firebase from 'firebase/compat/app';
 import type { CourseProgress } from '~/types/course';
+import {
+  ref as fbRef,
+  get,
+  onValue,
+  set,
+  update,
+} from 'firebase/database';
+import { ref } from 'vue';
 
 export const useCourseProgress = defineStore(
   'courseProgress',
   () => {
+    const { $db, $auth } = useNuxtApp();
     // Initialize progress from local storage
     const progress = ref<CourseProgress>({});
     const initialized = ref(false);
 
     async function initialize() {
       // If the course has already been initialized, return
+      console.log('initialized value: ', initialized.value);
       if (initialized.value) return;
       initialized.value = true;
 
-      const { data: userProgress } =
-        await useFetch<CourseProgress>(
-          '/api/user/progress',
-          { headers: useRequestHeaders(['cookie']) }
-        );
+      let idToken = await $auth?.currentUser?.getIdToken();
 
+      const { number: userProgress } = await usePugFetch(
+        '/api/user/progress',
+        {
+          headers: {
+            Authorization: idToken,
+          },
+        }
+      );
       // Update progress value
-      if (userProgress.value) {
+      if (userProgress?.value) {
         progress.value = userProgress.value;
       }
+      console.log(
+        '🚀 ~ initialize ~ progress:',
+        JSON.stringify(progress),
+        ' : ',
+        JSON.stringify(userProgress)
+      );
+      console.log('userProgress: ', userProgress);
     }
-
     const percentageCompleted = computed(() => {
       const chapters = Object.values(progress.value).map(
         (chapter) => {
@@ -70,12 +92,16 @@ export const useCourseProgress = defineStore(
       lesson: string
     ) => {
       // ************** [NEED TO DO THIS] If there's no user we can't update the progress ********************
-      const user = useUserStore;
-      if (user.email === 'undefined') return;
+      const auth = getAuth();
+      const user = auth.currentUser;
+      // console.log('🚀 ~ user:', user);
+
+      if (user?.email === 'undefined') return;
       console.log(
         'cP: should be checking for user',
-        user.email
+        user?.email
       );
+
       if (!chapter || !lesson) {
         // Grab chapter and lesson slugs from the route if they're not provided
         const {
@@ -89,6 +115,11 @@ export const useCourseProgress = defineStore(
       const currentProgress =
         progress.value[chapter]?.[lesson];
 
+      console.log(
+        'currentProgress for this lesson: ',
+        currentProgress
+      );
+
       // Optimistically update the progress value in the UI
       progress.value[chapter] = {
         ...progress.value[chapter],
@@ -97,24 +128,29 @@ export const useCourseProgress = defineStore(
 
       // Update the progress in the DB
       try {
-        await $fetch(
-          `/api/course/chapter/${chapter}/lesson/${lesson}/progress`,
-          {
-            method: 'POST',
-            // Automatically stringified by ofetch
-            body: {
-              completed: !currentProgress,
-            },
-          }
+        const lessonRef = fbRef(
+          $db,
+          'users/' +
+            user?.uid +
+            '/lessonProgress/' +
+            chapter +
+            '/' +
+            lesson
         );
+        // console.log('lessonRef: ', lessonRef);
+        set(lessonRef, {
+          completed: currentProgress || false,
+        });
+        // await get(lessonRef).then((snapshot) => {
+        //   console.log(
+        //     'current lesson complete value: ',
+        //     snapshot.val()
+        //   );
+        // });
       } catch (error) {
         console.error(error);
 
         // If the request failed, revert the progress value
-        progress.value[chapter] = {
-          ...progress.value[chapter],
-          [lesson]: currentProgress,
-        };
       }
     };
 

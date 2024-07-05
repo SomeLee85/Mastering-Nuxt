@@ -1,10 +1,12 @@
 import initFirebase from '../utils/firebase';
 import stripe from './stripe';
 import { getDatabase } from 'firebase-admin/database';
+import { useUserStore } from '~/stores/user';
 
 export default defineEventHandler(async (event) => {
   initFirebase();
-  const { email, username } = await readBody(event);
+  const { email } = await readBody(event);
+  let user = useUserStore();
   const userId = getHeader(event, 'Cookie');
   // We only have one course for now, so we have the price hard-coded
   //sets the price that will be charged through stripe
@@ -29,7 +31,7 @@ export default defineEventHandler(async (event) => {
   function writeUserData() {
     const db = getDatabase();
     const ref = db.ref('/users');
-    const userRef = ref.child('/' + username);
+    const userRef = ref.child('/' + user.user.uid);
     userRef.set({
       createdAt: Date(),
       userId: userId,

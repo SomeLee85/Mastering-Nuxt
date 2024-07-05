@@ -5,7 +5,6 @@ export default async function (
   opts: any = {},
   version: number = 1
 ) {
-  // console.log('🚀 ~ url:', url);
   const { $auth } = useNuxtApp();
   const runtimeConfig = useRuntimeConfig();
   //@ts-ignore

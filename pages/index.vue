@@ -21,12 +21,11 @@
       Buy Now
     </button>
     <p
-      class="text-lg font-bold"
+      class="text-m font-bold"
       style="margin-top: 20px; margin-bottom: -20px"
     >
       or
     </p>
-    <GitHubLogin />
     <a
       class="hover:text-blue-500 hover:underline"
       :href="'/course/chapter/1-chapter-1/lesson/1-introduction-to-typescript-with-vue-js-3'"
@@ -136,6 +135,7 @@ const screenshots = [
 ];
 definePageMeta({
   layout: false,
+  middleware: ['auth'],
 });
 
 const showPayment = ref(false);

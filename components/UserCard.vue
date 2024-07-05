@@ -49,13 +49,14 @@ import {
   signInWithPopup,
   signOut,
 } from 'firebase/auth';
-import { getDatabase } from 'firebase/database';
-const db = getDatabase();
+// import { getDatabase } from 'firebase/database';
+// const db = getDatabase();
 const auth = getAuth();
 const provider = new GithubAuthProvider();
 
 const logout = async () => {
   signOut(auth);
+  window.location.reload();
 };
 
 const login = async () => {
@@ -84,7 +85,7 @@ const login = async () => {
 //     console.error(error);
 //   }
 // };
-const user2 = auth.currentUser;
+user.user = auth.currentUser;
 defineProps({
   modelValue: {
     type: Boolean,
@@ -94,7 +95,7 @@ defineProps({
 
 defineEmits(['update:modelValue']);
 
-const name = computed(() => user2?.displayName);
+const name = computed(() => user.user.displayName);
 
-const profile = computed(() => user2?.photoURL);
+const profile = computed(() => user.user.photoURL);
 </script>

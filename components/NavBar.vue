@@ -40,11 +40,14 @@
       style="padding: 20px"
       >About</a
     >
-    <div v-if="user.isLoggedIn" style="padding-left: 81.1%">
+    <div
+      v-if="user?.isLoggedIn"
+      style="position: absolute; right: 0.2%"
+    >
       <UserCard />
     </div>
 
-    <div v-else style="padding-left: 83.4%">
+    <div v-else style="position: absolute; right: 0.2%">
       <UserCard />
     </div>
   </div>

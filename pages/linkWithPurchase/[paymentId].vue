@@ -1,24 +1,34 @@
 <script setup>
 import { useUserStore } from '@/stores/user';
+import auth from '~/middleware/auth';
 const user = useUserStore();
-// console.log('🚀 ~ user:', user);
 
-watchEffect(async () => {
-  if (user.value) {
+onMounted(async () => {
+  if (user) {
     const route = useRoute();
-    await $fetch(
-      `/api/user/linkWithPurchase/${route.params.paymentId}`,
-      {
-        headers: useRequestHeaders(['cookie']),
-      }
-    );
-    await navigateTo(
-      '/course/chapter/1-chapter-1/lesson/1-introduction-to-typescript-with-vue-js-3',
-      {
-        replace: true,
-      }
-    );
+    const router = useRouter();
+    try {
+      await useFetch(
+        `/api/user/linkWithPurchase/${route.params.paymentId}`,
+        {
+          headers: useRequestHeaders(['cookie']),
+        }
+      );
+
+      await router.push({
+        path: '/course/chapter/1-chapter-1/lesson/1-introduction-to-typescript-with-vue-js-3',
+      });
+    } catch (e) {
+      console.error('🚀 ~ watchEffect ~ e:', e);
+    }
+
+    // await navigateTo({
+    //   replace: true,
+    // });
   }
 });
 const render = () => {};
+definePageMeta({
+  auth: auth,
+});
 </script>

@@ -1,2 +1,1 @@
-export default async () =>
-  useFetchWithCache('/api/course/meta');
+export default async () => $fetch('/api/course/meta');
