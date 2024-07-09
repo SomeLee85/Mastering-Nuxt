@@ -1,75 +1,63 @@
-import { PrismaClient, Prisma } from '@prisma/client';
-
-const prisma = new PrismaClient();
-
-const lessonSelect = Prisma.validator<Prisma.LessonArgs>()({
-  select: {
-    title: true,
-    slug: true,
-    number: true,
-  },
-});
-export type LessonOutline = Prisma.LessonGetPayload<
-  typeof lessonSelect
-> & {
+export type LessonOutline = {
+  title: string;
+  slug: string;
+  number: number;
   path: string;
 };
 
-const chapterSelect =
-  Prisma.validator<Prisma.ChapterArgs>()({
-    select: {
-      title: true,
-      slug: true,
-      number: true,
-      lessons: lessonSelect,
-    },
-  });
-export type ChapterOutline = Omit<
-  Prisma.ChapterGetPayload<typeof chapterSelect>,
-  'lessons'
-> & {
+export type ChapterOutline = {
+  title: string;
+  slug: string;
+  number: number;
   lessons: LessonOutline[];
 };
 
-const courseSelect = Prisma.validator<Prisma.CourseArgs>()({
-  select: {
-    title: true,
-    chapters: chapterSelect,
-  },
-});
-export type CourseOutline = Omit<
-  Prisma.CourseGetPayload<typeof courseSelect>,
-  'chapters'
-> & {
+export type CourseOutline = {
+  title: string;
   chapters: ChapterOutline[];
 };
+import { getDatabase } from 'firebase-admin/database';
+import initFirebase from '../utils/firebase';
 
-export default defineEventHandler(
-  async (): Promise<CourseOutline> => {
-    const outline = await prisma.course.findFirst(
-      courseSelect
-    );
+export default defineEventHandler(async () => {
+  //   const outline = await prisma.course.findFirst(
+  //     courseSelect
+  //   );
 
-    // Error if there is no course
-    if (!outline) {
-      throw createError({
-        statusCode: 404,
-        statusMessage: 'Course not found',
+  initFirebase();
+
+  const db = getDatabase();
+  const chapterRef = db.ref('chapters');
+  const titleRef = db.ref('title');
+  let course: any[] = [];
+  let obj;
+  const courseData = await new Promise((resolve) => {
+    titleRef.on('value', (snapshot) => {
+      const title = snapshot.val();
+      let temp = {
+        title: title,
+      };
+      Object.assign(obj, temp);
+      // console.log('~ object: ', JSON.stringify(obj));
+      course.push(temp);
+    });
+    chapterRef.orderByValue().on('value', (snapshot) => {
+      Object.assign(obj.child, snapshot.key);
+      snapshot.forEach((data) => {
+        Object.assign(obj.child, data.key, data.val());
+        let tmp = {
+          id: data.key,
+          ...data.val(),
+        };
+        course.push(tmp);
       });
-    }
+      resolve(course);
+    });
 
-    // Map the outline so we can add a path to each lesson
-    const chapters = outline.chapters.map((chapter) => ({
-      ...chapter,
-      lessons: chapter.lessons.map((lesson) => ({
-        ...lesson,
-        path: `/course/chapter/${chapter.slug}/lesson/${lesson.slug}`,
-      })),
-    }));
-
-    return {
-      ...outline,
-      chapters,
-    };
-  }
-);
+    // console.log(
+    //   '~ object stringified value: ',
+    //   JSON.stringify(obj)
+    // );
+  });
+  return course;
+});

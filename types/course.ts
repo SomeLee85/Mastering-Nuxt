@@ -1,6 +1,15 @@
-import type { Lesson } from '@prisma/client';
-
-export type LessonWithPath = Lesson & {
+export type LessonWithPath = {
+  id: number;
+  title: string;
+  slug: string;
+  number: number;
+  downloadUrl: string;
+  videoId: number;
+  text: string;
+  sourceUrl: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  chapterId: number;
   path: string;
 };
 

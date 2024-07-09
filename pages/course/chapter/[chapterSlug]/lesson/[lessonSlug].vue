@@ -1,100 +1,88 @@
 <template>
   <div>
-    <p class="mt-0 uppercase font-bold text-slate-400 mb-1">
-      Lesson {{ chapter.number }} - {{ lesson.number }}
-    </p>
-    <h2 class="my-0">{{ lesson.title }}</h2>
+    <p class="mt-0 uppercase font-bold text-slate-400 mb-1">Lesson {{ chapter?.number }} - {{ lesson?.number }}</p>
+    <h2 class="my-0">{{ lesson?.title }}</h2>
     <div class="flex space-x-4 mt-2 mb-8">
-      <NuxtLink
-        v-if="lesson.sourceUrl"
-        class="font-normal text-md text-gray-500"
-        :to="lesson.sourceUrl"
-      >
-        Download Source Code
-      </NuxtLink>
+      <NuxtLink v-if="lesson?.sourceUrl" class="font-normal text-md text-gray-500" :to="lesson?.sourceUrl"> Download Source Code </NuxtLink>
       <!--Provides video download link if there is one-->
-      <NuxtLink
-        v-if="lesson.downloadUrl"
-        class="font-normal text-md text-gray-500"
-        :to="lesson.downloadUrl"
-      >
-        Download Video
-      </NuxtLink>
+      <NuxtLink v-if="lesson?.downloadUrl" class="font-normal text-md text-gray-500" :to="lesson.downloadUrl"> Download Video </NuxtLink>
     </div>
-    <VideoPlayer
-      v-if="lesson.videoId"
-      :videoId="lesson.videoId"
-    />
+    <VideoPlayer v-if="lesson?.videoId" :videoId="lesson.videoId" />
     <p>{{ lesson.text }}</p>
-    <LessonCompleteButton
-      v-if="user"
-      :model-value="isCompleted"
-      @update:model-value="toggleComplete"
-    />
+    <LessonCompleteButton v-if="user" :model-value="isCompleted" @update:model-value="toggleComplete" />
   </div>
 </template>
 
-<script setup>
-import { useCourseProgress } from '~/stores/courseProgress.ts';
-const course = await useCourse();
-const user = useSupabaseUser();
-const route = useRoute();
-const { chapterSlug, lessonSlug } = route.params;
-const lesson = await useLesson(chapterSlug, lessonSlug);
+<script setup lang="ts">
+import { useCourseProgress } from '~/stores/courseProgress';
+import { getDatabase, ref as dbRef, onValue, get } from 'firebase/database';
+import { getAuth } from 'firebase/auth';
 const store = useCourseProgress();
 const { initialize, toggleComplete } = store;
-
 initialize();
+const auth = getAuth();
+const user = auth.currentUser;
+
+const route = useRoute();
+const { chapterSlug, lessonSlug } = route.params;
 
 definePageMeta({
-  middleware: [
-    async function ({ params }, from) {
-      const course = await useCourse();
+  middleware: ['auth'],
+});
 
-      const chapter = course.value.chapters.find(
-        (chapter) => chapter.slug === params.chapterSlug
-      );
+const db = getDatabase();
+const titleRef = dbRef(db, 'title');
+const chapterRef = dbRef(db, 'chapters');
+const lessonsRef = dbRef(db, 'lessons');
+// console.log('🚀 ~ user?.uid:', user?.uid);
 
-      if (!chapter) {
-        return abortNavigation(
-          createError({
-            statusCode: 404,
-            message: 'Chapter not found',
-          })
-        );
+let title: any;
+let lesson: any;
+let lessons: any[] = [];
+let chapters: any[] = [];
+let progress: any[] = [];
+
+await get(chapterRef).then((snapshot) => {
+  let index = 0;
+  snapshot.forEach((data) => {
+    if (data.val() != null) {
+      chapters.push(data.val());
+    }
+    for (let i = 0; i < chapters[index].lessons.length; i++) {
+      if (chapters[index].lessons[i].slug === lessonSlug) {
+        lesson = chapters[index].lessons[i];
       }
+    }
+    index++;
+  });
+});
 
-      const lesson = chapter.lessons.find(
-        (lesson) => lesson.slug === params.lessonSlug
-      );
+onValue(titleRef, (snapshot) => {
+  title = snapshot.val();
+});
 
-      if (!lesson) {
-        return abortNavigation(
-          createError({
-            statusCode: 404,
-            message: 'Lesson not found',
-          })
-        );
-      }
-    },
-    'auth',
-  ],
+onValue(lessonsRef, (snapshot) => {
+  snapshot.forEach((data) => {
+    if (data.val() != null) {
+      lessons.push(data.val());
+    }
+  });
 });
 
 // Check if the current lesson is completed
 const isCompleted = computed(() => {
-  return store.progress?.[chapterSlug]?.[lessonSlug] || 0;
-});
-
-const chapter = computed(() => {
-  return course.value.chapters.find(
-    (chapter) => chapter.slug === route.params.chapterSlug
+  return (
+    //@ts-ignore
+    store.progress?.[chapterSlug]?.[lessonSlug]
   );
 });
 
-const title = computed(() => {
-  return `${lesson.value.title} - ${course.value.title}`;
+// console.log('🚀 ~ completedVal:', completedVal);
+
+const chapter = computed(() => {
+  return chapters.find((chapter) => chapter.slug === route.params.chapterSlug);
 });
+
 useHead({
   title,
 });

@@ -15,7 +15,7 @@
       <img
         :src="homeIcon"
         style="
-          width: 25px;
+          width: 30px;
           height: 25px;
           float: left;
           transform: translate(-5px, -4px);
@@ -25,10 +25,11 @@
     </a>
     <a
       class="hover:bg-gray-600"
-      href="/course"
+      href="/course/chapter/1-chapter-1/lesson/1-introduction-to-typescript-with-vue-js-3"
       style="padding: 20px"
-      >Course Page</a
-    ><a
+      >Course
+    </a>
+    <a
       class="hover:bg-gray-600"
       href="/FAQ"
       style="padding: 20px"
@@ -39,11 +40,14 @@
       style="padding: 20px"
       >About</a
     >
-    <div v-if="user.isLoggedIn" style="padding-left: 79.4%">
+    <div
+      v-if="user?.isLoggedIn"
+      style="position: absolute; right: 0.2%"
+    >
       <UserCard />
     </div>
 
-    <div v-else style="padding-left: 81.8%">
+    <div v-else style="position: absolute; right: 0.2%">
       <UserCard />
     </div>
   </div>

@@ -1,10 +1,10 @@
 <template>
   <div
-    v-if="user.isLoggedIn"
+    v-if="user.isLoggedIn && profile != null"
     class="rounded p-3 flex items-center space-x-3 bg-gray-100"
   >
     <img
-      class="rounded-full h-9 border-2 border-blue-400"
+      class="rounded-full h-8 border-2 border-blue-400"
       :src="profile"
     />
     <div class="text-right">
@@ -41,29 +41,51 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/user';
 const user = useUserStore();
-const supabase = useSupabaseClient();
+// const supabase = useSupabaseClient();
+
+import {
+  getAuth,
+  GithubAuthProvider,
+  signInWithPopup,
+  signOut,
+} from 'firebase/auth';
+// import { getDatabase } from 'firebase/database';
+// const db = getDatabase();
+const auth = getAuth();
+const provider = new GithubAuthProvider();
 
 const logout = async () => {
-  const { error } = await supabase.auth.signOut();
-
-  if (error) {
-    console.error(error);
-    return;
-  }
+  signOut(auth);
+  window.location.reload();
 };
 
 const login = async () => {
-  const { error } = await supabase.auth.signInWithOAuth({
-    provider: 'github',
-    options: {
-      redirectTo: window.location.href,
-    },
-  });
-  if (error) {
-    console.error(error);
-  }
+  signInWithPopup(auth, provider)
+    .then((result) => {
+      const credential =
+        GithubAuthProvider.credentialFromResult(result);
+      const token = credential?.accessToken;
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      const email = error.customData.email;
+      const credential =
+        GithubAuthProvider.credentialFromError(error);
+    });
 };
 
+//   const { error } = await supabase.auth.signInWithOAuth({
+//     provider: 'github',
+//     options: {
+//       redirectTo: window.location.href,
+//     },
+//   });
+//   if (error) {
+//     console.error(error);
+//   }
+// };
+user.user = auth.currentUser;
 defineProps({
   modelValue: {
     type: Boolean,
@@ -73,10 +95,7 @@ defineProps({
 
 defineEmits(['update:modelValue']);
 
-const name = computed(
-  () => user?.user?.user_metadata?.full_name
-);
-const profile = computed(
-  () => user?.user?.user_metadata?.avatar_url
-);
+const name = computed(() => user.user.displayName);
+
+const profile = computed(() => user.user.photoURL);
 </script>

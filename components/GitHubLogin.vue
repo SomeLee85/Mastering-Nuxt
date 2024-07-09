@@ -33,33 +33,34 @@ button {
 </style>
 
 <script setup lang="ts">
-const course = await useCourse();
+import {
+  GithubAuthProvider,
+  signInWithPopup,
+} from 'firebase/auth';
+//@ts-ignore
+const nuxtApp = useNuxtApp();
+const auth = nuxtApp.$auth;
+const provider = new GithubAuthProvider();
 const { query } = useRoute();
-const supabase = useSupabaseClient();
-const user = useSupabaseUser();
-
-//Checks if a user is logged in and redirects route to query
-watchEffect(async () => {
-  if (user.value) {
-    await navigateTo(query.redirectTo as string, {
-      replace: true,
-    });
-  }
-});
-
 const login = async () => {
-  const queryParams =
-    query.redirectTo !== undefined
-      ? `?redirectTo=${query.redirectTo}`
-      : '';
-  const redirectTo = `${window.location.origin}/confirm${queryParams}`;
-  const { error } = await supabase.auth.signInWithOAuth({
-    provider: 'github',
-    options: { redirectTo },
-  });
-
-  if (error) {
-    console.error(error);
-  }
+  //@ts-ignore
+  signInWithPopup(auth, provider)
+    .then((result) => {
+      const credential =
+        GithubAuthProvider.credentialFromResult(result);
+      const token = credential?.accessToken;
+      if (query.redirectTo != null) {
+        navigateTo(query.redirectTo as string, {
+          replace: true,
+        });
+      }
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      const email = error.customData.email;
+      const credential =
+        GithubAuthProvider.credentialFromError(error);
+    });
 };
 </script>
