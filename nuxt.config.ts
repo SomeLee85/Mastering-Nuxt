@@ -13,19 +13,9 @@ export default defineNuxtConfig({
     typeCheck: false,
   },
 
-  // nitro: {
-  //   prerender: {
-  //     routes: ['/'],
-  //   },
-  // },
-
   vite: {
     plugins: [vsharp()],
   },
 
-  modules: [
-    '@nuxtjs/tailwindcss',
-    '@vueuse/nuxt',
-    '@pinia/nuxt',
-  ],
+  modules: ['@nuxtjs/tailwindcss', '@vueuse/nuxt', '@pinia/nuxt'],
 });

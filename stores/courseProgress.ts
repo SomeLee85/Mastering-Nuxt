@@ -24,12 +24,9 @@ export const useCourseProgress = defineStore('courseProgress', () => {
       headers: { Authorization: idToken },
     });
     // Update progress value
-    try {
-      if (userProgress?.value) {
-        progress.value = userProgress.value;
-      }
-    } catch (e) {
-      console.error(e);
+
+    if (userProgress?.value) {
+      progress.value = userProgress.value;
     }
   }
 
