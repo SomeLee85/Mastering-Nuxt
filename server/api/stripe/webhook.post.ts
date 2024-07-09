@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+// import { PrismaClient } from '@prisma/client';
 import { getDatabase } from 'firebase-admin/database';
 import stripe from './stripe';
 
@@ -6,9 +6,8 @@ type PaymentIntent = {
   id: string;
 };
 
-const prisma = new PrismaClient();
-const STRIPE_WEBHOOK_SECRET =
-  useRuntimeConfig().stripeWebhookSecret;
+// const prisma = new PrismaClient();
+const STRIPE_WEBHOOK_SECRET = useRuntimeConfig().stripeWebhookSecret;
 
 export default defineEventHandler(async (event) => {
   const signature = getHeader(event, 'stripe-signature');
@@ -17,11 +16,7 @@ export default defineEventHandler(async (event) => {
   // Verify the webhook signature
   let stripeEvent;
   try {
-    stripeEvent = await stripe.webhooks.constructEvent(
-      body,
-      signature,
-      STRIPE_WEBHOOK_SECRET
-    );
+    stripeEvent = await stripe.webhooks.constructEvent(body, signature, STRIPE_WEBHOOK_SECRET);
   } catch (error) {
     console.error('Invalid signature', error);
     throw createError({
@@ -32,26 +27,15 @@ export default defineEventHandler(async (event) => {
 
   //if-else checks for payment success from stripes webhook data
   if (stripeEvent.type === 'payment_intent.succeeded') {
-    await handlePaymentIntentSucceeded(
-      stripeEvent.data.object,
-      rBody.data.object.receipt_email
-    );
-  } else if (
-    stripeEvent.type === 'payment_intent.payment_failed'
-  ) {
-    await handlePaymentIntentFailed(
-      stripeEvent.data.object,
-      rBody.data.object.receipt_email
-    );
+    await handlePaymentIntentSucceeded(stripeEvent.data.object, rBody.data.object.receipt_email);
+  } else if (stripeEvent.type === 'payment_intent.payment_failed') {
+    await handlePaymentIntentFailed(stripeEvent.data.object, rBody.data.object.receipt_email);
   }
 
   return 200;
 });
 
-async function handlePaymentIntentSucceeded(
-  paymentIntent: PaymentIntent,
-  email: string
-) {
+async function handlePaymentIntentSucceeded(paymentIntent: PaymentIntent, email: string) {
   // Verify the related course purchase
   try {
     const db = getDatabase();
@@ -81,8 +65,7 @@ async function handlePaymentIntentSucceeded(
           '3-typing-component-events': { completed: false },
         },
         '2-chapter-2': {
-          '1-using-typescript-with-the-options-api-in-components':
-            { completed: false },
+          '1-using-typescript-with-the-options-api-in-components': { completed: false },
           '2-declaring-and-typing-component-props': {
             completed: false,
           },
@@ -92,8 +75,7 @@ async function handlePaymentIntentSucceeded(
           '4-typing-component-events': { completed: false },
         },
         '3-chapter-3': {
-          '1-using-typescript-with-the-options-api-in-components':
-            { completed: false },
+          '1-using-typescript-with-the-options-api-in-components': { completed: false },
           '2-declaring-and-typing-component-props': {
             completed: false,
           },
@@ -113,10 +95,7 @@ async function handlePaymentIntentSucceeded(
   }
 }
 
-async function handlePaymentIntentFailed(
-  paymentIntent: PaymentIntent,
-  email: string
-) {
+async function handlePaymentIntentFailed(paymentIntent: PaymentIntent, email: string) {
   // Clean up the course purchase
   try {
     const db = getDatabase();
