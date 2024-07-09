@@ -1,7 +1,7 @@
 import { getDatabase } from 'firebase-admin/database';
-import { PrismaClient } from '@prisma/client';
+// import { PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient();
+// const prisma = new PrismaClient();
 
 type User = {
   email: string;
@@ -20,10 +20,7 @@ export default defineEventHandler(async (event) => {
 
   // No user is logged in
   if (!user) {
-    console.log(
-      '(hasAccess)User is not signed in. (user):',
-      user
-    );
+    console.log('(hasAccess)User is not signed in. (user):', user);
     return false;
   }
   // console.log(
@@ -37,10 +34,7 @@ export default defineEventHandler(async (event) => {
   const data = await ref.get();
   data.forEach((d) => {
     const val = d.val();
-    if (
-      val.userEmail === email &&
-      val.verified === 'true'
-    ) {
+    if (val.userEmail === email && val.verified === 'true') {
       return true;
     }
   });
