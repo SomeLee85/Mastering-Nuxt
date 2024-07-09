@@ -15,6 +15,7 @@
     "@pinia/nuxt": "^0.5.1",
     "@prisma/client": "^5.15.1",
     "@tailwindcss/typography": "^0.5.8",
+    "@types/lodash": "^4.17.6",
     "@vueuse/core": "^10.11.0",
     "@vueuse/nuxt": "^10.7.0",
     "nuxt": "^3.8.2",
@@ -29,6 +30,7 @@
     "@floating-ui/vue": "^1.0.6",
     "firebase": "^10.12.2",
     "firebase-admin": "^12.1.1",
+    "lodash": "^4.3.2",
     "sharp": "^0.33.4",
     "stripe": "^15.10.0",
     "vue-router": "^4.4.0"

@@ -38,7 +38,7 @@ export default defineEventHandler(async () => {
         title: title,
       };
       Object.assign(obj, temp);
-      console.log('~ object: ', JSON.stringify(obj));
+      // console.log('~ object: ', JSON.stringify(obj));
       course.push(temp);
     });
     chapterRef.orderByValue().on('value', (snapshot) => {
@@ -54,32 +54,10 @@ export default defineEventHandler(async () => {
       resolve(course);
     });
 
-    console.log(
-      '~ object stringified value: ',
-      JSON.stringify(obj)
-    );
+    // console.log(
+    //   '~ object stringified value: ',
+    //   JSON.stringify(obj)
+    // );
   });
-  // console.log('~ courseData ~ ', courseData);
   return course;
-  // Error if there is no course
-  // if (!outline) {
-  //   throw createError({
-  //     statusCode: 404,
-  //     statusMessage: 'Course not found',
-  //   });
-  // }
-
-  // Map the outline so we can add a path to each lesson
-  // const chapters = outline.chapters.map((chapter) => ({
-  //   ...chapter,
-  //   lessons: chapter.lessons.map((lesson) => ({
-  //     ...lesson,
-  //     path: `/course/chapter/${chapter.slug}/lesson/${lesson.slug}`,
-  //   })),
-  // }));
-
-  // return {
-  //   ...outline,
-  //   chapters,
-  // };
 });

@@ -18,13 +18,13 @@ export default defineEventHandler(async (event) => {
   // console.log('🚀 ~ defineEventHandler ~ auth:', auth);
   // onIdTokenChanged(auth, async (user) => {
 
-  console.log('~ event.context.user ~', event.context.user);
+  // console.log('~ event.context.user ~', event.context.user);
   //@ts-ignore
   const { paymentId } = event.context.params;
   // const user = getHeader(event, 'user');
   // console.log('🚀 ~ //onIdTokenChanged ~ user:', user);
   const body = await readBody(event).catch(() => {});
-  console.log('body:', body);
+  // console.log('body:', body);
 
   // Update course purchase record
   try {

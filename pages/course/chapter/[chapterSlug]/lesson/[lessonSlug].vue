@@ -1,47 +1,21 @@
 <template>
   <div>
-    <p class="mt-0 uppercase font-bold text-slate-400 mb-1">
-      Lesson {{ chapter?.number }} - {{ lesson?.number }}
-    </p>
+    <p class="mt-0 uppercase font-bold text-slate-400 mb-1">Lesson {{ chapter?.number }} - {{ lesson?.number }}</p>
     <h2 class="my-0">{{ lesson?.title }}</h2>
     <div class="flex space-x-4 mt-2 mb-8">
-      <NuxtLink
-        v-if="lesson?.sourceUrl"
-        class="font-normal text-md text-gray-500"
-        :to="lesson?.sourceUrl"
-      >
-        Download Source Code
-      </NuxtLink>
+      <NuxtLink v-if="lesson?.sourceUrl" class="font-normal text-md text-gray-500" :to="lesson?.sourceUrl"> Download Source Code </NuxtLink>
       <!--Provides video download link if there is one-->
-      <NuxtLink
-        v-if="lesson?.downloadUrl"
-        class="font-normal text-md text-gray-500"
-        :to="lesson.downloadUrl"
-      >
-        Download Video
-      </NuxtLink>
+      <NuxtLink v-if="lesson?.downloadUrl" class="font-normal text-md text-gray-500" :to="lesson.downloadUrl"> Download Video </NuxtLink>
     </div>
-    <VideoPlayer
-      v-if="lesson?.videoId"
-      :videoId="lesson.videoId"
-    />
+    <VideoPlayer v-if="lesson?.videoId" :videoId="lesson.videoId" />
     <p>{{ lesson.text }}</p>
-    <LessonCompleteButton
-      v-if="user"
-      :model-value="completedVal"
-      @update:model-value="toggleComplete"
-    />
+    <LessonCompleteButton v-if="user" :model-value="isCompleted" @update:model-value="toggleComplete" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { useCourseProgress } from '~/stores/courseProgress';
-import {
-  getDatabase,
-  ref as dbRef,
-  onValue,
-  get,
-} from 'firebase/database';
+import { getDatabase, ref as dbRef, onValue, get } from 'firebase/database';
 import { getAuth } from 'firebase/auth';
 const store = useCourseProgress();
 const { initialize, toggleComplete } = store;
@@ -60,11 +34,7 @@ const db = getDatabase();
 const titleRef = dbRef(db, 'title');
 const chapterRef = dbRef(db, 'chapters');
 const lessonsRef = dbRef(db, 'lessons');
-const progressRef = dbRef(
-  db,
-  'users/' + user?.uid + '/lessonProgress'
-);
-console.log('🚀 ~ user?.uid:', user?.uid);
+// console.log('🚀 ~ user?.uid:', user?.uid);
 
 let title: any;
 let lesson: any;
@@ -78,11 +48,7 @@ await get(chapterRef).then((snapshot) => {
     if (data.val() != null) {
       chapters.push(data.val());
     }
-    for (
-      let i = 0;
-      i < chapters[index].lessons.length;
-      i++
-    ) {
+    for (let i = 0; i < chapters[index].lessons.length; i++) {
       if (chapters[index].lessons[i].slug === lessonSlug) {
         lesson = chapters[index].lessons[i];
       }
@@ -104,38 +70,17 @@ onValue(lessonsRef, (snapshot) => {
 });
 
 // Check if the current lesson is completed
-var completedVal = reactive(<any>false);
-await get(progressRef).then((data) => {
-  data.forEach((snapshot) => {
-    snapshot.forEach((d) => {
-      if (
-        snapshot.key === chapterSlug &&
-        d.key === lessonSlug
-      ) {
-        console.log(
-          'completed Value at ' +
-            chapterSlug +
-            ' ' +
-            lessonSlug +
-            ' ' +
-            d.child('completed').val()
-        );
-        completedVal = d.child('completed').val();
-      }
-    });
-  });
+const isCompleted = computed(() => {
+  return (
+    //@ts-ignore
+    store.progress?.[chapterSlug]?.[lessonSlug]
+  );
 });
-console.log(
-  '🚀 ~ completedVal ~ completedVal:',
-  completedVal
-);
 
 // console.log('🚀 ~ completedVal:', completedVal);
 
 const chapter = computed(() => {
-  return chapters.find(
-    (chapter) => chapter.slug === route.params.chapterSlug
-  );
+  return chapters.find((chapter) => chapter.slug === route.params.chapterSlug);
 });
 
 useHead({
