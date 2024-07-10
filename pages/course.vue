@@ -1,8 +1,6 @@
 <template>
   <div>
-    <div
-      class="mb-4 flex justify-between items-center w-full"
-    >
+    <div class="mb-4 flex justify-between items-center w-full">
       <h1 class="text-3xl">
         <span class="font-medium text-green-800">
           <span class="font-bold">{{ title }}</span>
@@ -11,9 +9,7 @@
     </div>
 
     <div class="flex flex-row justify-center flex-grow">
-      <div
-        class="prose mr-4 p-8 bg-white rounded-md min-w-[20ch] max-w-[30ch] flex flex-col"
-      >
+      <div class="prose mr-4 p-8 bg-white rounded-md min-w-[20ch] max-w-[30ch] flex flex-col">
         <h3>Chapters</h3>
         <div
           class="space-y-1 mb-4 flex flex-col"
@@ -22,10 +18,7 @@
         >
           <h4 class="flex justify-between items-center">
             {{ chapters[index].title }}
-            <span
-              v-if="percentageCompleted"
-              class="text-emerald-500 text-sm"
-            >
+            <span v-if="percentageCompleted" class="text-emerald-500 text-sm">
               {{ percentageCompleted.chapters[index] }}%
             </span>
           </h4>
@@ -35,17 +28,11 @@
             class="flex flex-row space-x-1 no-underline prose-sm font-normal py-1 px-4 -mx-4"
             :to="chapter.lessons[index].path"
             :class="{
-              'text-blue-500':
-                chapter.lessons[index].path ===
-                $route.fullPath,
-              'text-gray-600':
-                chapter.lessons[index].path !==
-                $route.fullPath,
+              'text-blue-500': chapter.lessons[index].path === $route.fullPath,
+              'text-gray-600': chapter.lessons[index].path !== $route.fullPath,
             }"
           >
-            <span class="text-gray-500"
-              >{{ index + 1 }}.</span
-            >
+            <span class="text-gray-500">{{ index + 1 }}.</span>
             <span>{{ chapter.lessons[index].title }}</span>
           </NuxtLink>
         </div>
@@ -82,15 +69,8 @@
 </template>
 
 <script setup lang="ts">
-import {
-  getDatabase,
-  ref,
-  onValue,
-  get,
-} from 'firebase/database';
+import { getDatabase, ref, onValue, get } from 'firebase/database';
 import { useCourseProgress } from '~/stores/courseProgress';
-
-// Get chapter completion percentages
 
 const db = getDatabase();
 const titleRef = ref(db, 'title');
@@ -110,14 +90,10 @@ await get(chapterRef).then((snapshot) => {
   });
 });
 
-const { percentageCompleted } = storeToRefs(
-  useCourseProgress()
-);
+const { percentageCompleted } = storeToRefs(useCourseProgress());
 
 const resetError = async (error: { value: null }) => {
-  await navigateTo(
-    '/course/chapter/1-chapter-1/lesson/1-introduction-to-typescript-with-vue-js-3'
-  );
+  await navigateTo('/course/chapter/1-chapter-1/lesson/1-introduction-to-typescript-with-vue-js-3');
   error.value = null;
 };
 </script>

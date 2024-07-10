@@ -1,13 +1,12 @@
 import { getDatabase } from 'firebase-admin/database';
 import initFirebase from '~/server/api/utils/firebase';
-
 import _ from 'lodash';
 initFirebase();
-const db = getDatabase();
 
-export default defineEventHandler(async (event) => {
-  const user = event.context.user;
-  const progressRef = db.ref('users/' + user?.uid + '/lessonProgress');
+const db = getDatabase();
+export default async function (req, context) {
+  const userId = req.headers.get('Authorization');
+  const progressRef = db.ref('users/' + userId + '/lessonProgress');
 
   let obj = {};
 
@@ -25,5 +24,6 @@ export default defineEventHandler(async (event) => {
       }
     });
   });
-  return obj;
-});
+  console.log(JSON.stringify(obj, null, 2));
+  return new Response(JSON.stringify(obj, null, 2));
+}

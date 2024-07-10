@@ -1,15 +1,11 @@
 import { getDatabase } from 'firebase-admin/database';
 
-type User = {
-  email: string;
-};
-
 /*
  *  This handler grabs the currently logged in user then scans the database to check if there is
  * a user with a matching email and if they are shown as verified with that email.
  */
-export default defineEventHandler(async (event) => {
-  const user = event.context.user as User;
+export async function handler(event) {
+  const user = event.context.user;
   const email = event.context.email;
 
   // No user is logged in
@@ -28,4 +24,4 @@ export default defineEventHandler(async (event) => {
       return true;
     }
   });
-});
+}

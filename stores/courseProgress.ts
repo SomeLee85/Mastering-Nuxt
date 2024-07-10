@@ -1,7 +1,6 @@
 import { getAuth } from 'firebase/auth';
-import firebase from 'firebase/compat/app';
 import type { CourseProgress } from '~/types/course';
-import { ref as fbRef, get, onValue, set, update } from 'firebase/database';
+import { ref as fbRef, set } from 'firebase/database';
 import { ref } from 'vue';
 import _ from 'lodash';
 
@@ -13,18 +12,17 @@ export const useCourseProgress = defineStore('courseProgress', () => {
 
   async function initialize() {
     // If the course has already been initialized, return
-    // console.log('initialized value: ', initialized.value);
     if (initialized.value) return;
     initialized.value = true;
 
     let idToken = await $auth?.currentUser?.getIdToken();
 
-    const { data: userProgress } = await useFetch<CourseProgress>('/api/user/progress', {
+    const { data: userProgress } = await useFetch<CourseProgress>('~/functions/progress', {
       //@ts-ignore
       headers: { Authorization: idToken },
     });
-    // Update progress value
 
+    // Update progress value
     if (userProgress?.value) {
       progress.value = userProgress.value;
     }
@@ -62,13 +60,10 @@ export const useCourseProgress = defineStore('courseProgress', () => {
 
   // Toggle the progress of a lesson based on chapter slug and lesson slug
   const toggleComplete = async (chapter: string, lesson: string) => {
-    // ************** [NEED TO DO THIS] If there's no user we can't update the progress ********************
     const auth = getAuth();
     const user = auth.currentUser;
-    // console.log('🚀 ~ user:', user);
 
     if (user?.email === 'undefined') return;
-    // console.log('cP: should be checking for user', user?.email);
 
     if (!chapter || !lesson) {
       // Grab chapter and lesson slugs from the route if they're not provided
@@ -82,18 +77,13 @@ export const useCourseProgress = defineStore('courseProgress', () => {
     // Get the current progress for the lesson
     const currentProgress = progress.value[chapter]?.[lesson];
 
-    // console.log('currentProgress for this lesson: ', currentProgress, progress);
-
     let tmp = _.cloneDeep(progress.value);
 
-    // Optimistically update the progress value in the UI
     // @ts-ignore
     tmp[chapter][lesson]['completed'] = !currentProgress?.completed;
-    // console.log('tmp for this lesson: ', tmp);
     progress.value = tmp;
     // Update the progress in the DB
     const completedRef = fbRef($db, 'users/' + user?.uid + '/lessonProgress/' + chapter + '/' + lesson + '/completed');
-    // console.log('🚀 ~ toggleComplete ~ completedRef:', completedRef.toString());
     //@ts-ignore
     set(completedRef, !currentProgress?.completed);
   };

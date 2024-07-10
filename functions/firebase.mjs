@@ -1,6 +1,6 @@
 import admin from 'firebase-admin';
 
-var serverConfig: any = {
+var serverConfig = {
   type: 'service_account',
   project_id: 'mastering-nuxt-3-9e7fb',
   private_key_id: '34a68a698cbef95ab13929b8957ca05363e765a6',
@@ -11,11 +11,12 @@ var serverConfig: any = {
   auth_uri: 'https://accounts.google.com/o/oauth2/auth',
   token_uri: 'https://oauth2.googleapis.com/token',
   auth_provider_x509_cert_url: 'https://www.googleapis.com/oauth2/v1/certs',
-  client_x509_cert_url: 'https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-afl1m%40mastering-nuxt-3-9e7fb.iam.gserviceaccount.com',
+  client_x509_cert_url:
+    'https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-afl1m%40mastering-nuxt-3-9e7fb.iam.gserviceaccount.com',
   universe_domain: 'googleapis.com',
 };
 
-var app: any;
+var app;
 
 export default function initFirebase() {
   if (!app) {
