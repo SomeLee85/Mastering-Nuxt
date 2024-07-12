@@ -1,9 +1,10 @@
 import { getDatabase } from 'firebase-admin/database';
-import user from '~/server/middleware/user';
+import user from './user.mjs';
+import { defineEventHandler } from 'h3';
 
-export default async function (req, context) {
+export default defineEventHandler(async (event) => {
   // Get PaymentIntent ID from route
-  const { paymentId } = context.params;
+  const { paymentId } = event.context.params;
 
   // Update course purchase record
   try {
@@ -30,4 +31,4 @@ export default async function (req, context) {
     });
   }
   return 200;
-}
+});

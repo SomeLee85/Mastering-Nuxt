@@ -3,11 +3,11 @@ import stripe from './stripe.mjs';
 import { getDatabase } from 'firebase-admin/database';
 import { useUserStore } from '~/stores/user';
 
-export default async function () {
+export default defineEventHandler(async (event) => {
   initFirebase();
-  const { email } = await readBody(context);
+  const { email } = await readBody(event);
   let user = useUserStore();
-  const userId = getHeader(context, 'Cookie');
+  const userId = getHeader(event, 'Cookie');
   // We only have one course for now, so we have the price hard-coded
   //sets the price that will be charged through stripe
   let paymentIntent = { id, client_secret };
@@ -41,4 +41,4 @@ export default async function () {
   writeUserData();
   // Only return the secret
   return paymentIntent.client_secret;
-}
+});

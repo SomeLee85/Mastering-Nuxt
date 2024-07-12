@@ -1,1 +1,1 @@
-export default async () => $fetch('/api/course/meta');
+export default async () => $fetch('~/functions/meta');

@@ -15,13 +15,21 @@ export const useCourseProgress = defineStore('courseProgress', () => {
     if (initialized.value) return;
     initialized.value = true;
 
-    let idToken = await $auth?.currentUser?.getIdToken();
+    let userId = await $auth.currentUser?.uid;
 
-    const { data: userProgress } = await useFetch<CourseProgress>('~/functions/progress', {
+    const { data: userProgress } = await useFetch<CourseProgress>('http://localhost:8888/.netlify/functions/progress', {
       //@ts-ignore
-      headers: { Authorization: idToken },
+      headers: { uid: userId },
     });
 
+    try {
+      userProgress.value = JSON.parse(userProgress.value as string);
+      console.log('🚀 ~ initialize ~ userProgress:', userProgress.value);
+    } catch {}
+    // } catch (e) {
+    //   console.error(e);
+    // }
+    let temp = {};
     // Update progress value
     if (userProgress?.value) {
       progress.value = userProgress.value;
@@ -31,11 +39,14 @@ export const useCourseProgress = defineStore('courseProgress', () => {
   const percentageCompleted = computed(() => {
     const chapters = Object.values(progress.value).map((chapter) => {
       const lessons = Object.values(chapter);
+      console.log('🚀 ~ chapters ~ lessons:', lessons);
       const completedLessons = _.filter(lessons, {
         completed: true,
       });
+      console.log('🚀 ~ chapters ~ completedLessons:', completedLessons);
       return Number((completedLessons.length / lessons.length) * 100).toFixed(0);
     }, []);
+    console.log('🚀 ~ chapters ~ chapters:', chapters);
 
     const totalLessons = Object.values(progress.value).reduce((number, chapter) => {
       return number + Object.values(chapter).length;

@@ -1,17 +1,20 @@
 import { getDatabase } from 'firebase-admin/database';
-
+import initFirebase from './firebase.mjs';
+import _ from 'lodash';
+initFirebase();
 /*
  *  This handler grabs the currently logged in user then scans the database to check if there is
  * a user with a matching email and if they are shown as verified with that email.
  */
-export async function handler(event) {
-  const user = event.context.user;
-  const email = event.context.email;
+export default async function (req, context) {
+  const userEmail = req.headers.get('userEmail');
+  const userId = req.headers.get('userId');
+  const email = userEmail;
 
   // No user is logged in
-  if (!user) {
-    console.log('(hasAccess)User is not signed in. (user):', user);
-    return false;
+  if (!userId) {
+    console.log('(hasAccess)User is not signed in. (user):', userId);
+    return new Response(false);
   }
 
   const db = getDatabase();
@@ -20,8 +23,9 @@ export async function handler(event) {
   const data = await ref.get();
   data.forEach((d) => {
     const val = d.val();
-    if (val.userEmail === email && val.verified === 'true') {
-      return true;
+    if (val.userEmail === email && val.verified === true) {
+      console.log('User has access.');
+      return new Response(true);
     }
   });
 }

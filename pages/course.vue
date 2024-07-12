@@ -10,22 +10,16 @@
 
     <div class="flex flex-row justify-center flex-grow">
       <div class="prose mr-4 p-8 bg-white rounded-md min-w-[20ch] max-w-[30ch] flex flex-col">
-        <h3>Chapters</h3>
-        <div
-          class="space-y-1 mb-4 flex flex-col"
-          v-for="(chapter, index) in chapters"
-          :key="chapters[index].slug"
-        >
+        <h3 class="text-xl font-semibold">Chapters</h3>
+        <div class="space-y-1 mb-4 flex flex-col font-semibold" v-for="(chapter, index) in chapters" :key="chapters[index].slug">
           <h4 class="flex justify-between items-center">
             {{ chapters[index].title }}
-            <span v-if="percentageCompleted" class="text-emerald-500 text-sm">
-              {{ percentageCompleted.chapters[index] }}%
-            </span>
+            <span v-if="percentageCompleted" class="text-emerald-500 text-sm"> {{ percentageCompleted.chapters[index] }}% </span>
           </h4>
           <NuxtLink
             v-for="(lesson, index) in chapter.lessons"
             :key="chapter.lessons[index].slug"
-            class="flex flex-row space-x-1 no-underline prose-sm font-normal py-1 px-4 -mx-4"
+            class="flex flex-row space-x-1 prose-sm font-normal py-1 px-4 -mx-4 hover:font-semibold"
             :to="chapter.lessons[index].path"
             :class="{
               'text-blue-500': chapter.lessons[index].path === $route.fullPath,
@@ -36,10 +30,7 @@
             <span>{{ chapter.lessons[index].title }}</span>
           </NuxtLink>
         </div>
-        <div
-          v-if="percentageCompleted"
-          class="mt-8 text-sm font-medium text-gray-500 flex justify-between items-center"
-        >
+        <div v-if="percentageCompleted" class="mt-8 text-sm font-medium text-gray-500 flex justify-between items-center">
           Course completion:
           <span> {{ percentageCompleted.course }}% </span>
         </div>
@@ -54,10 +45,7 @@
               <code>{{ error }}</code>
             </p>
             <p>
-              <button
-                class="hover:cursor-pointer bg-gray-500 text-white font-bold py-1 px-3 rounded"
-                @click="resetError(error)"
-              >
+              <button class="hover:cursor-pointer bg-gray-500 text-white font-bold py-1 px-3 rounded" @click="resetError(error)">
                 Reset
               </button>
             </p>

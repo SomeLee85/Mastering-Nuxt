@@ -1,5 +1,5 @@
 import { getDatabase } from 'firebase-admin/database';
-import initFirebase from '~/server/api/utils/firebase';
+import initFirebase from '~/functions/firebase.mjs';
 
 import _ from 'lodash';
 initFirebase();

@@ -8,7 +8,7 @@ onMounted(async () => {
     const route = useRoute();
     const router = useRouter();
     try {
-      await useFetch(`/api/user/linkWithPurchase/${route.params.paymentId}`, {
+      await useFetch(`/functions/${route.params.paymentId}`, {
         headers: useRequestHeaders(['cookie']),
       });
 

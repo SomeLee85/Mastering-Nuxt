@@ -1,5 +1,5 @@
 import { getDatabase } from 'firebase-admin/database';
-import user from '~/server/middleware/user';
+import user from '~/functions/user.mjs';
 
 export default defineEventHandler(async (event) => {
   // Get PaymentIntent ID from route
