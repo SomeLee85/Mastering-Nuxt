@@ -8,10 +8,11 @@ export default async function (req, context) {
   // console.log('🚀 ~ defineEventHandler ~ event:', req);
   const signature = req.headers.get('stripe-signature');
   const body = req.body;
+
   console.log('🚀 ~ body:', body);
   // const signature = getHeaders(event);
   // const body = await readRawBody(event);
-  const rBody = await readBody(event);
+  // const rBody = await readBody(event);
   // Verify the webhook signature
   let stripeEvent;
   try {

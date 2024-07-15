@@ -91,8 +91,6 @@ const isCompleted = computed(() => {
   );
 });
 
-// console.log('🚀 ~ completedVal:', completedVal);
-
 const chapter = computed(() => {
   return chapters.find((chapter) => chapter.slug === route.params.chapterSlug);
 });
