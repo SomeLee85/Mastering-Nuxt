@@ -1,6 +1,5 @@
 import { getUser } from './firebase-helper.mjs';
 import { defineEventHandler } from 'h3';
-var app;
 
 //creates cookies for user to allow user to refresh page
 //and still have access to the same route and database
