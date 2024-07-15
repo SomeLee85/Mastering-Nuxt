@@ -3,6 +3,7 @@ import user from './user.mjs';
 import { defineEventHandler } from 'h3';
 
 export default defineEventHandler(async (event) => {
+  console.log('Made it to [paymentId]');
   // Get PaymentIntent ID from route
   const { paymentId } = event.context.params;
 

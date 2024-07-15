@@ -46,6 +46,7 @@ const login = async () => {
     .then((result) => {
       const credential = GithubAuthProvider.credentialFromResult(result);
       const token = credential?.accessToken;
+      window.location.reload();
     })
     .catch((error) => {
       const errorCode = error.code;

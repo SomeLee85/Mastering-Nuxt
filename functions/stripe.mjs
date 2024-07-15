@@ -1,5 +1,8 @@
 import stripe from 'stripe';
-const config = useRuntimeConfig();
-const Stripe = stripe(config.stripeSecret);
+import { defineEventHandler } from 'h3';
+export default defineEventHandler(async (event) => {
+  const config = useRuntimeConfig(event);
+  const Stripe = stripe(config.stripeSecret);
 
-export default Stripe;
+  return Stripe;
+});

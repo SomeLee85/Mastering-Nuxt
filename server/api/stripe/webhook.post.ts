@@ -12,7 +12,9 @@ const STRIPE_WEBHOOK_SECRET = useRuntimeConfig().stripeWebhookSecret;
 export default defineEventHandler(async (event) => {
   const signature = getHeader(event, 'stripe-signature');
   const body = await readRawBody(event);
+  console.log('🚀 ~ defineEventHandler ~ body:', body);
   const rBody = await readBody(event);
+  console.log('🚀 ~ defineEventHandler ~ rBody:', rBody);
   // Verify the webhook signature
   let stripeEvent;
   try {

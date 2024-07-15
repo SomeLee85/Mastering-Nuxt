@@ -1,12 +1,16 @@
 import { getDatabase } from 'firebase-admin/database';
 import stripe from './stripe.mjs';
-import { defineEventHandler } from 'h3';
+import { defineEventHandler, readBody, readRawBody, getHeader, getHeaders } from 'h3';
 
-const STRIPE_WEBHOOK_SECRET = useRuntimeConfig().stripeWebhookSecret;
+const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
 
-export default defineEventHandler(async (event) => {
-  const signature = req.headers.get(event, 'stripe-signature');
-  const body = await readRawBody(event);
+export default async function (req, context) {
+  // console.log('🚀 ~ defineEventHandler ~ event:', req);
+  const signature = req.headers.get('stripe-signature');
+  const body = req.body;
+  console.log('🚀 ~ body:', body);
+  // const signature = getHeaders(event);
+  // const body = await readRawBody(event);
   const rBody = await readBody(event);
   // Verify the webhook signature
   let stripeEvent;
@@ -28,7 +32,7 @@ export default defineEventHandler(async (event) => {
   }
 
   return 200;
-});
+}
 
 async function handlePaymentIntentSucceeded(paymentIntent, email) {
   // Verify the related course purchase

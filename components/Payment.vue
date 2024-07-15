@@ -95,10 +95,10 @@ const handleSubmit = async () => {
 
   try {
     // Create a PaymentIntent with the order amount and currency
-    const response = await $fetch('~/functions/paymentIntent', {
-      method: 'POST',
-      body: {
-        email: user.user.email,
+    const response = await $fetch('./.netlify/functions/paymentIntent', {
+      headers: {
+        userEmail: user.user.email,
+        uId: user.user.uid,
       },
     });
     secret = response;
