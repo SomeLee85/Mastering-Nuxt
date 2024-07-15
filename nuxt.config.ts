@@ -2,12 +2,12 @@
 export default defineNuxtConfig({
   runtimeConfig: {
     stripeSecret: '',
-    ssr: false,
     stripeWebhookSecret: '',
     public: {
       stripeKey: '',
     },
   },
+  ssr: false,
   typescript: {
     typeCheck: false,
   },
