@@ -26,9 +26,6 @@ export const useCourseProgress = defineStore('courseProgress', () => {
       userProgress.value = JSON.parse(userProgress.value as string);
       console.log('🚀 ~ initialize ~ userProgress:', userProgress.value);
     } catch {}
-    // } catch (e) {
-    //   console.error(e);
-    // }
     let temp = {};
     // Update progress value
     if (userProgress?.value) {
