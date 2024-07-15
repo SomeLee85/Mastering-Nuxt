@@ -1,20 +1,17 @@
-// import { PrismaClient } from '@prisma/client';
 import { getDatabase } from 'firebase-admin/database';
-import stripe from './stripe';
+import stripe from './stripe.mjs';
+import { defineEventHandler, readBody, readRawBody, getHeader, getHeaders } from 'h3';
 
-type PaymentIntent = {
-  id: string;
-};
+const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
 
-// const prisma = new PrismaClient();
-const STRIPE_WEBHOOK_SECRET = useRuntimeConfig().stripeWebhookSecret;
-
-export default defineEventHandler(async (event) => {
-  const signature = getHeader(event, 'stripe-signature');
-  const body = await readRawBody(event);
-  console.log('🚀 ~ defineEventHandler ~ body:', body);
+export default async function (req, context) {
+  // console.log('🚀 ~ defineEventHandler ~ event:', req);
+  const signature = req.headers.get('stripe-signature');
+  const body = req.body;
+  console.log('🚀 ~ body:', body);
+  // const signature = getHeaders(event);
+  // const body = await readRawBody(event);
   const rBody = await readBody(event);
-  console.log('🚀 ~ defineEventHandler ~ rBody:', rBody);
   // Verify the webhook signature
   let stripeEvent;
   try {
@@ -35,9 +32,9 @@ export default defineEventHandler(async (event) => {
   }
 
   return 200;
-});
+}
 
-async function handlePaymentIntentSucceeded(paymentIntent: PaymentIntent, email: string) {
+async function handlePaymentIntentSucceeded(paymentIntent, email) {
   // Verify the related course purchase
   try {
     const db = getDatabase();
@@ -97,7 +94,7 @@ async function handlePaymentIntentSucceeded(paymentIntent: PaymentIntent, email:
   }
 }
 
-async function handlePaymentIntentFailed(paymentIntent: PaymentIntent, email: string) {
+async function handlePaymentIntentFailed(paymentIntent, email) {
   // Clean up the course purchase
   try {
     const db = getDatabase();

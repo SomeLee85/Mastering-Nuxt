@@ -1,10 +1,6 @@
 import { ofetch } from 'ofetch';
 
-export default async function (
-  url: string,
-  opts: any = {},
-  version: number = 1
-) {
+export default async function (url: string, opts: any = {}, version: number = 1) {
   const { $auth } = useNuxtApp();
   const runtimeConfig = useRuntimeConfig();
   //@ts-ignore

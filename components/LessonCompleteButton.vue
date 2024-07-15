@@ -6,17 +6,8 @@
       'bg-gray-500': !modelValue.completed,
     }"
   >
-    <input
-      type="checkbox"
-      :value="modelValue.completed"
-      @input="() => $emit('update:modelValue', modelValue)"
-      class="hidden"
-    />
-    {{
-      modelValue.completed
-        ? 'Completed!'
-        : 'Mark as complete'
-    }}
+    <input type="checkbox" :value="modelValue.completed" @input="() => $emit('update:modelValue', modelValue)" class="hidden" />
+    {{ modelValue.completed ? 'Completed!' : 'Mark as complete' }}
   </label>
 </template>
 

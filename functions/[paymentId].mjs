@@ -1,9 +1,10 @@
 import { getDatabase } from 'firebase-admin/database';
-import user from '~/functions/user.mjs';
+import user from './user.mjs';
+import { defineEventHandler } from 'h3';
 
 export default defineEventHandler(async (event) => {
+  console.log('Made it to [paymentId]');
   // Get PaymentIntent ID from route
-  //@ts-ignore
   const { paymentId } = event.context.params;
 
   // Update course purchase record

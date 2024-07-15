@@ -1,15 +1,8 @@
 <template>
   <Modal @close="$emit('close')">
-    <div
-      class="bg-slate-200 p-8 rounded-xl w-full max-w-2xl"
-    >
-      <div
-        v-if="success"
-        class="flex flex-col justify-center items-center space-y-6"
-      >
-        <h2 class="text-xl font-bold">
-          Thanks for buying the course!
-        </h2>
+    <div class="bg-slate-200 p-8 rounded-xl w-full max-w-2xl">
+      <div v-if="success" class="flex flex-col justify-center items-center space-y-6">
+        <h2 class="text-xl font-bold">Thanks for buying the course!</h2>
         <a
           class="hover:underline hover:text-blue-500"
           href="/course/chapter/1-chapter-1/lesson/1-introduction-to-typescript-with-vue-js-3"
@@ -24,9 +17,7 @@
         </button> -->
       </div>
       <div v-else-if="user.user === null">
-        <h1 class="text-xl" style="padding-bottom: 10%">
-          Please sign in before purchasing course.
-        </h1>
+        <h1 class="text-xl" style="padding-bottom: 10%">Please sign in before purchasing course.</h1>
         <GitHubLogin />
       </div>
       <form v-else @submit.prevent="handleSubmit">
@@ -34,9 +25,7 @@
           Buying {{ title }} for
           {{ user.user.email }}
         </h2>
-        <div
-          class="mt-8 text-base width bg-white py-8 px-6 rounded shadow-md"
-        >
+        <div class="mt-8 text-base width bg-white py-8 px-6 rounded shadow-md">
           <div id="card-element">
             <!-- Elements will create input elements here -->
           </div>
@@ -51,10 +40,7 @@
           "
           :disabled="processingPayment || email === ''"
         >
-          <Loading
-            v-if="processingPayment"
-            class="h-5 w-5"
-          />
+          <Loading v-if="processingPayment" class="h-5 w-5" />
           <div v-else>Pay $74.89</div>
         </button>
       </form>
@@ -63,16 +49,10 @@
 </template>
 
 <script setup>
-import {
-  getDatabase,
-  get,
-  ref as fbRef,
-} from 'firebase/database';
+import { getDatabase, get, ref as fbRef } from 'firebase/database';
 const db = getDatabase();
 const titleRef = fbRef(db, 'title');
-const title = await get(titleRef).then((snapshot) =>
-  snapshot.val()
-);
+const title = await get(titleRef).then((snapshot) => snapshot.val());
 
 const config = useRuntimeConfig();
 const stripe = ref(null);
@@ -115,30 +95,24 @@ const handleSubmit = async () => {
 
   try {
     // Create a PaymentIntent with the order amount and currency
-    const response = await $fetch(
-      '/api/stripe/paymentIntent',
-      {
-        method: 'POST',
-        body: {
-          email: user.user.email,
-        },
-      }
-    );
+    const response = await $fetch('./.netlify/functions/paymentIntent', {
+      headers: {
+        userEmail: user.user.email,
+        uId: user.user.uid,
+      },
+    });
     secret = response;
   } catch (e) {
     console.log(e);
   }
 
   try {
-    const response = await stripe.value.confirmCardPayment(
-      secret,
-      {
-        payment_method: {
-          card: card.value,
-        },
-        receipt_email: user.user.email,
-      }
-    );
+    const response = await stripe.value.confirmCardPayment(secret, {
+      payment_method: {
+        card: card.value,
+      },
+      receipt_email: user.user.email,
+    });
 
     if (response.paymentIntent.status === 'succeeded') {
       success.value = true;

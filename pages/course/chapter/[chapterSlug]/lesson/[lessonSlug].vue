@@ -3,13 +3,27 @@
     <p class="mt-0 uppercase font-bold text-slate-400 mb-1">Lesson {{ chapter?.number }} - {{ lesson?.number }}</p>
     <h2 class="my-0">{{ lesson?.title }}</h2>
     <div class="flex space-x-4 mt-2 mb-8">
-      <NuxtLink v-if="lesson?.sourceUrl" class="font-normal text-md text-gray-500" :to="lesson?.sourceUrl"> Download Source Code </NuxtLink>
+      <NuxtLink
+        v-if="lesson?.sourceUrl"
+        class="font-normal text-md text-gray-500 hover:text-blue-600 hover:underline"
+        :to="lesson?.sourceUrl"
+      >
+        Download Source Code
+      </NuxtLink>
       <!--Provides video download link if there is one-->
-      <NuxtLink v-if="lesson?.downloadUrl" class="font-normal text-md text-gray-500" :to="lesson.downloadUrl"> Download Video </NuxtLink>
+      <NuxtLink
+        v-if="lesson?.downloadUrl"
+        class="font-normal text-md text-gray-500 hover:text-blue-600 hover:underline"
+        :to="lesson.downloadUrl"
+      >
+        Download Video
+      </NuxtLink>
     </div>
     <VideoPlayer v-if="lesson?.videoId" :videoId="lesson.videoId" />
     <p>{{ lesson.text }}</p>
-    <LessonCompleteButton v-if="user" :model-value="isCompleted" @update:model-value="toggleComplete" />
+    <div class="py-8">
+      <LessonCompleteButton v-if="user" :model-value="isCompleted" @update:model-value="toggleComplete" />
+    </div>
   </div>
 </template>
 

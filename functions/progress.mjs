@@ -1,13 +1,14 @@
 import { getDatabase } from 'firebase-admin/database';
-import initFirebase from '~/functions/firebase.mjs';
-
+import initFirebase from './firebase.mjs';
 import _ from 'lodash';
 initFirebase();
-const db = getDatabase();
 
-export default defineEventHandler(async (event) => {
-  const user = event.context.user;
-  const progressRef = db.ref('users/' + user?.uid + '/lessonProgress');
+const db = getDatabase();
+export default async function (req, context) {
+  const userId = req.headers.get('uid');
+  console.log('🚀 ~ userId:', userId);
+
+  const progressRef = db.ref('users/' + userId + '/lessonProgress');
 
   let obj = {};
 
@@ -15,6 +16,7 @@ export default defineEventHandler(async (event) => {
   data.forEach((snapshot) => {
     snapshot.forEach((d) => {
       let chapterSlug = snapshot.key;
+      console.log('🚀 ~ snapshot.forEach ~ snapshot.key:', snapshot.key);
 
       if (!obj[chapterSlug] || !_.isObject(obj[chapterSlug])) {
         obj[chapterSlug] = {};
@@ -25,5 +27,6 @@ export default defineEventHandler(async (event) => {
       }
     });
   });
-  return obj;
-});
+  console.log('This is the progress object: ', JSON.stringify(obj));
+  return new Response(JSON.stringify(obj));
+}

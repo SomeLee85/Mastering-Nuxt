@@ -7,13 +7,11 @@ onMounted(async () => {
   if (user) {
     const route = useRoute();
     const router = useRouter();
+    console.log('This should be the route to [paymentId]: ', route.params.paymentId);
     try {
-      await useFetch(
-        `/api/user/linkWithPurchase/${route.params.paymentId}`,
-        {
-          headers: useRequestHeaders(['cookie']),
-        }
-      );
+      await useFetch(`/functions/${route.params.paymentId}`, {
+        headers: useRequestHeaders(['cookie']),
+      });
 
       await router.push({
         path: '/course/chapter/1-chapter-1/lesson/1-introduction-to-typescript-with-vue-js-3',
@@ -21,10 +19,6 @@ onMounted(async () => {
     } catch (e) {
       console.error('🚀 ~ watchEffect ~ e:', e);
     }
-
-    // await navigateTo({
-    //   replace: true,
-    // });
   }
 });
 const render = () => {};

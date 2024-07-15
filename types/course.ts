@@ -20,3 +20,22 @@ export type ChapterProgress = {
 export type CourseProgress = {
   [key: string]: ChapterProgress;
 };
+
+export type LessonOutline = {
+  title: string;
+  slug: string;
+  number: number;
+  path: string;
+};
+
+export type ChapterOutline = {
+  title: string;
+  slug: string;
+  number: number;
+  lessons: LessonOutline[];
+};
+
+export type CourseOutline = {
+  title: string;
+  chapters: ChapterOutline[];
+};

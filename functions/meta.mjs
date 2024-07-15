@@ -1,13 +1,13 @@
 import { getDatabase } from 'firebase-admin/database';
-import initFirebase from '../utils/firebase';
+import initFirebase from './firebase.mjs';
 
-export default defineEventHandler(async () => {
+export default async function () {
   initFirebase();
 
   const db = getDatabase();
   const chapterRef = db.ref('chapters');
   const titleRef = db.ref('title');
-  let course: any[] = [];
+  let course = [];
 
   await new Promise((resolve) => {
     titleRef.on('value', (snapshot) => {
@@ -28,5 +28,5 @@ export default defineEventHandler(async () => {
       resolve(course);
     });
   });
-  return course;
-});
+  return new Response(course);
+}
