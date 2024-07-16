@@ -13,7 +13,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
       /**!!!!!!! 
       // Need to change the fetch url when deploying to netlify
       !!!!!!!!!!!!!*/
-      const hasAccess = await usePugFetch('http://localhost:8888/.netlify/functions/hasAccess', {
+      const hasAccess = await usePugFetch('https://mastering-nuxt-netlify.netlify.app/.netlify/functions/hasAccess', {
         headers: { userEmail: user2.user.email, userId: user2.user.uid },
       });
       if (hasAccess) {

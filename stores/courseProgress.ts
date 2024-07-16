@@ -17,10 +17,13 @@ export const useCourseProgress = defineStore('courseProgress', () => {
 
     let userId = await $auth.currentUser?.uid;
 
-    const { data: userProgress } = await useFetch<CourseProgress>('http://localhost:8888/.netlify/functions/progress', {
-      //@ts-ignore
-      headers: { uid: userId },
-    });
+    const { data: userProgress } = await useFetch<CourseProgress>(
+      'https://mastering-nuxt-netlify.netlify.app/.netlify/functions/progress',
+      {
+        //@ts-ignore
+        headers: { uid: userId },
+      }
+    );
 
     try {
       userProgress.value = JSON.parse(userProgress.value as string);
