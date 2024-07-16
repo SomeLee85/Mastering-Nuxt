@@ -8,14 +8,14 @@ export default defineNuxtPlugin((nuxtApp) => {
   // Your web app's Firebase configuration
   // For Firebase JS SDK v7.20.0 and later, measurementId is optional
   const firebaseConfig = {
-    apiKey: 'AIzaSyAomolTHnxh1HpNsJ9J0ZfCp08nZReZuKs',
-    authDomain: 'nuxt-course-54f47.firebaseapp.com',
-    databaseURL: 'https://nuxt-course-54f47-default-rtdb.firebaseio.com',
-    projectId: 'nuxt-course-54f47',
-    storageBucket: 'nuxt-course-54f47.appspot.com',
-    messagingSenderId: '401493740312',
-    appId: '1:401493740312:web:2a0015c06fbdd439d3ec6d',
-    measurementId: 'G-9GZVZVLPJL',
+    apiKey: 'AIzaSyDPhNiYW-HHsfhli3ikONHyW8JHrI_i7mo',
+    authDomain: 'adam-s-nuxt-course.firebaseapp.com',
+    databaseURL: 'https://adam-s-nuxt-course-default-rtdb.firebaseio.com',
+    projectId: 'adam-s-nuxt-course',
+    storageBucket: 'adam-s-nuxt-course.appspot.com',
+    messagingSenderId: '492838168468',
+    appId: '1:492838168468:web:a127979b538a94bc219181',
+    measurementId: 'G-3R73D76P20',
   };
 
   // Initialize Firebase
