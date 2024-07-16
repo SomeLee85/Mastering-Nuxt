@@ -15,6 +15,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
       !!!!!!!!!!!!!*/
       const hasAccess = await usePugFetch('https://mastering-nuxt-netlify.netlify.app/.netlify/functions/hasAccess', {
         headers: { userEmail: user2.user.email, userId: user2.user.uid },
+        mode: 'no-cors',
       });
       if (hasAccess) {
         return;
