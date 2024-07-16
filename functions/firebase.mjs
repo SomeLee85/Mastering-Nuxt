@@ -2,17 +2,17 @@ import admin from 'firebase-admin';
 
 var serverConfig = {
   type: 'service_account',
-  project_id: 'nuxt-course-54f47',
-  private_key_id: '8270b6cdf39cc9f11a4787a0093765568850dd6c',
+  project_id: 'adam-s-nuxt-course',
+  private_key_id: '9652f072b1e9894fbfe482d7809753f38e1294a4',
   private_key:
-    '-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQClCpmy1Ngdn04Y\nDT7ytRpg+ASmYSpIFX4y01prn7h+Dqhm+aIqD0zwcqhn908UUrCjxQkzP1BgLLKp\nBD2o18sjmFdeRD5O8dLk2uX68Q4fAgSIL45Rzb5hRB8FT0bjfj9S+dWhgX3hg07K\neQsg193XCH3QVK3GxmdGEYqWPrW4CQNtGB8O8Wf8GWRYcNG/dIE1oWW7Rh8ZMJBs\n1WgrdlkfLj9r9bNatFpgbsrNq1MoCX4AXTmnHntgrZrKcqvrXo6sWdOXNSzE7q2t\nhmb2L9eyiglHKcHOa5pyBOd9XvvfgZFrjbyfAm0CIcjc9OT31eba7vow1TIAI5S+\n/88BVDStAgMBAAECggEAKpptaZX7Ac6NNLU6oiFw4UY0wRRE+12c+ZbIeQ6+a7/x\n5b8cBtpzRIB8i3XyMm9UDLqAsPtvjpwLNIkVN6AY3qPlLb7VDMDs7Um6Y0hVmliF\nffg0t1Yyhl402cSIqpH827kFVg8cxRmFvct4PW6r4+XbwGsTfsPZheNiUH14oDw8\n38BQQuOJzQoKWbdOwJpcK0KJ7qrPSI6ZNJcMQaNly7zC92446jwD0czN0UG9vqCO\nIanUKsSp2wgOl8cfPbLi0IIL5SJBFFA0YO/RCNzvkBDCLznNeqWcofiFvnGhYffr\nlnlS3/FTowjyd4t7cnGsJVzxwqHuU3ci9A/a4tySqwKBgQDga6g4r/EsNqexsnn7\nGsiULTbL1I+J6A3N0h8/Mxcwh5m6sRGEGk0hYl8dq+PzkrOHuZgdk0LwP0TwbbdN\nzvk7qpQ1Ywd4jhmWJExEn9BZ826eswaREAsHituxTnsFLJssZ03DJF2utvK0yGHS\nvxZhMi9lu0rvhDI4BpG9yjDIhwKBgQC8Q+r4acsSK+g1Mq8sLBDWvcIdnepzCGqq\nKbM0Oc0gLTEiYAEPK/2ovzkALzch9Y6qjxKPJE0lpJ87A5WikmztkcXLIPdDLskJ\nQ6GAxm2HCaa8OZnx/a6CIKs1q09Qhb2gn8nFa4naI56M2d6iXXjp4xyztMJ/1udF\nK+/4jdjKKwKBgAbiBmTGsKTkgDwo9yjGZ4Rz5oxV1pkqLtIzMZYkoP9yCTr6l0jv\n7ZGqjLRCQ1mDFFKDVLEDhTgNGLYvB0IxqN81mhoREXeXFB3Quy4XoLJBjxD6+KaW\nUWBH1/kWKRu9hHzWJkJn6R+kqMj2pFlsVulgOqfqGKBD865YNTwW6WwdAoGAD6oj\nCepbkDaBCrQd6TH9cLC3TxmNoWao4WG43HaWv7+i3/ZXADkr0PegOYi0MKoq5bwj\n0i82EBTDfviMYcuHLrk7WOx0Rm3FInUzIfDguiSub+jnC0CNXZx0QnHvloaaQZwq\nALgy7yiZj6StJptabTONdtJqgJKUCahfPjInQKMCgYA2TOe8KkR1gQvJwvfzwb8A\nmuh54caY7g7qGxssGVLuoJa/fDkfMJYArhbPhO+a9LLQWHiHDHKa19Gu3vkYPnUT\nAVDHzr7vjNd9AJHjJZrHxVw4Idq3N2GFGqEDsNe2kw06evjueYIAzvq73ZGgLZsj\nJ71BXLBm2Y3BTZZ0+ck1YQ==\n-----END PRIVATE KEY-----\n',
-  client_email: 'firebase-adminsdk-8b4t7@nuxt-course-54f47.iam.gserviceaccount.com',
-  client_id: '118065138860864777737',
+    '-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCYgjkcs15qAO40\n43ufQWreA4UqjCUSSxutVpfrbFJvlNdRSJ74rPy2P9A6bWxZ7jW5dAhZr88mhujq\nyAbZyNrHoGxJBH1NYlnrSawSmSJxFa5GwH1PEUPUzh8QnP2yxIyAdJpkpOyLgCNh\nlhgKalmIfuAT5Nx5CiL/vMzu1d4IsFiSTW4I536oHYf5Si27ukkauiwQJSvFY3v1\nzozaxhu6yJmE+9L2uBhcKSg+kk+nBBnofLlPNZEa5S6MwercYbYLvDO+Z90x0DDX\nkEWIDxyD0aJBGKiFskMdBYdnFQvUtzWqA5goaigpZ/YTeVf95iziOZpQLqwb9ieW\nX+Hqc95vAgMBAAECggEAOcg5GFEzZ+lTV1GLMJMqCNT/mte/Yfd4FIw3AhkoAKO9\nksv3g1OTaf+yhriXsVkKHOpEEasFSt0ZmX7Q7anmjnUPIfkj+nJVjEp8+gzwGjVz\nMtZSg+cQMqwn4/T/QECs1SyYpKJCBza08Q/bqvKRWqBriM4Q5IE9MnTXlnQMbHDC\nKLoWa+gjobO0PyTnO+oZ6vTI8f3/7HP0BKxFthKcJD3ugXa46de7ojbmsSLm8tws\nIITYssuqhEvdt7qQeQ3gO838o/Uz6vNl2KGv8udyat3MusRVWA5X8pjU0Gvtvolb\nAG56c/i5r16UJv5lAn8C47CcS3Op052zice/OTaosQKBgQDQDxG5hAEyPRhL3LWL\nOSzQJmbyXSr88e8fMHjaDr1RdzoqD1SQO/i2lf74F1oYjObQL67ImNk0+dBn2Ivy\n3thNEI46Zt5fjQ4ykygD/Q0KECRmphCJsuiRQEqGvie3BfBv8PeWo+T7UDsmkKJW\nHrFucioOBnfpevQqbyUF5Nxr/wKBgQC7pl859IDvspVKWecAee4aj76pJXQuS6de\n9Ipx8GOOZqaJkgti89EIYKHtoiIddrd5AZusD/nQizpbCrU+C4DJvNvu+ybTifgr\nL+krklg718dHoaPEkQY0G5o/umO5K3jEamnaXcdnhWDr+Ig1bXzTpfX9avgLeyD/\n3Wxt7uFNkQKBgGt2fRcvAVcrizMTyokgfO7+BspEKQIBDBs19BXc6xf61wYGaQ0e\njLXx/4Gwvg5UKJt7JXHi0L22Eliw1ogZZetYE75Ch7UerCifLVnyCBwcflCukXgt\n+kWbyWKTMPwtiySmd5tNB+ZuaD7hEZgdvlNnkCUyXhkwMpEAW0USEm+NAoGAF7R5\nvSGFFEK0F1NqGiZNDO/xvv5rQdnux9EOmDws53VSPnjDlXmFg5BphFKCCsTPgqrQ\nVpkiDtU3xv6ATNk5KMMB6ZuymPCJ+DKyOv3exZiJpSPnQ1KqvPRrtPc/18mFFRL4\nUkycfxhbWRPpaQ5uwXHqtFvJ//FLBuea5fxSW/ECgYEAjIni/6h2/LMQXKh834pT\nLpLBrKkrYyZn1U4Qynp8L5QkqbUCNlQMr6aOlwDOd9MWIwBYmaFnvfK7mwjMFwFj\n26vYKt+48pTZhWeoSyQU0QHm0BSPE5DHqNu14BNjznzd+YvUQzzkVI/2pK7Tl4CE\nysMcw3I8MRyKwEaRdZVEHxc=\n-----END PRIVATE KEY-----\n',
+  client_email: 'firebase-adminsdk-svmep@adam-s-nuxt-course.iam.gserviceaccount.com',
+  client_id: '108147617745994403906',
   auth_uri: 'https://accounts.google.com/o/oauth2/auth',
   token_uri: 'https://oauth2.googleapis.com/token',
   auth_provider_x509_cert_url: 'https://www.googleapis.com/oauth2/v1/certs',
   client_x509_cert_url:
-    'https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-8b4t7%40nuxt-course-54f47.iam.gserviceaccount.com',
+    'https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-svmep%40adam-s-nuxt-course.iam.gserviceaccount.com',
   universe_domain: 'googleapis.com',
 };
 
@@ -22,7 +22,7 @@ export default function initFirebase() {
   if (!app) {
     app = admin.initializeApp({
       credential: admin.credential.cert(serverConfig),
-      databaseURL: 'https://nuxt-course-54f47-default-rtdb.firebaseio.com/',
+      databaseURL: 'https://adam-s-nuxt-course-default-rtdb.firebaseio.com',
     });
   }
 }

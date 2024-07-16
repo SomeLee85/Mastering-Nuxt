@@ -1,42 +1,26 @@
 import { getDatabase } from 'firebase-admin/database';
-import stripe from './stripe.mjs';
-import { defineEventHandler, readBody, readRawBody, getHeader, getHeaders } from 'h3';
-
-const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
+import initFirebase from './firebase.mjs';
 
 export default async function (req, context) {
-  // console.log('🚀 ~ defineEventHandler ~ event:', req);
-  const signature = req.headers.get('stripe-signature');
-  const body = req.body;
+  const rawBody = JSON.parse(await req.text());
 
-  console.log('🚀 ~ body:', body);
-  // const signature = getHeaders(event);
-  // const body = await readRawBody(event);
-  // const rBody = await readBody(event);
-  // Verify the webhook signature
-  let stripeEvent;
-  try {
-    stripeEvent = await stripe.webhooks.constructEvent(body, signature, STRIPE_WEBHOOK_SECRET);
-  } catch (error) {
-    console.error('Invalid signature', error);
-    throw createError({
-      statusCode: 400,
-      statusMessage: 'Invalid signature',
-    });
-  }
+  const payment_intent = rawBody.data.object.id;
 
   //if-else checks for payment success from stripes webhook data
-  if (stripeEvent.type === 'payment_intent.succeeded') {
-    await handlePaymentIntentSucceeded(stripeEvent.data.object, rBody.data.object.receipt_email);
-  } else if (stripeEvent.type === 'payment_intent.payment_failed') {
-    await handlePaymentIntentFailed(stripeEvent.data.object, rBody.data.object.receipt_email);
+  if (rawBody.type === 'payment_intent.succeeded' && payment_intent != undefined) {
+    console.log('~ also paymentIntent ~', payment_intent);
+    await handlePaymentIntentSucceeded(payment_intent, rawBody.data.object.receipt_email);
+  } else if (rawBody.type === 'payment_intent.payment_failed') {
+    await handlePaymentIntentFailed(payment_intent, rawBody.data.object.receipt_email);
   }
 
-  return 200;
+  return new Response(200);
 }
 
 async function handlePaymentIntentSucceeded(paymentIntent, email) {
+  console.log('🚀 ~ handlePaymentIntentSucceeded ~ paymentIntent:', paymentIntent, email);
   // Verify the related course purchase
+  initFirebase();
   try {
     const db = getDatabase();
     var uid = '';
@@ -52,8 +36,6 @@ async function handlePaymentIntentSucceeded(paymentIntent, email) {
 
     const userRef = ref.child('/' + uid);
     userRef.update({
-      paymentId: paymentIntent.id,
-      verified: true,
       lessonProgress: {
         '1-chapter-1': {
           '1-introduction-to-typescript-with-vue-js-3': {
@@ -85,13 +67,11 @@ async function handlePaymentIntentSucceeded(paymentIntent, email) {
           '4-typing-component-events': { completed: false },
         },
       },
+      paymentId: paymentIntent,
+      verified: true,
     });
   } catch (error) {
     console.error('Invalid signature', error);
-    throw createError({
-      statusCode: 500,
-      statusMessage: 'Error verifying purchase',
-    });
   }
 }
 
@@ -114,9 +94,5 @@ async function handlePaymentIntentFailed(paymentIntent, email) {
     userRef.remove();
   } catch (error) {
     console.error('Invalid signature', error);
-    throw createError({
-      statusCode: 500,
-      statusMessage: 'Error removing purchase',
-    });
   }
 }
