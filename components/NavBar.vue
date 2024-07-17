@@ -7,8 +7,8 @@
     <p class="hover:bg-gray-600 rounded" style="padding: 20px">
       <DropDown></DropDown>
     </p>
-    <a class="hover:bg-gray-600 rounded" href="/FAQ" style="padding: 20px">FAQs</a
-    ><a class="hover:bg-gray-600 rounded" href="/about" style="padding: 20px">About</a>
+    <a class="hover:bg-gray-600 rounded" href="/FAQ" style="padding: 23px">FAQs</a
+    ><a class="hover:bg-gray-600 rounded" href="/about" style="padding: 23px">About</a>
     <div v-if="user?.isLoggedIn" style="position: absolute; right: 0.2%">
       <UserCard />
     </div>

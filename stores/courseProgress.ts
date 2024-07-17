@@ -20,7 +20,6 @@ export const useCourseProgress = defineStore('courseProgress', () => {
     const { data: userProgress } = await useFetch<CourseProgress>(
       'https://mastering-nuxt-netlify.netlify.app/.netlify/functions/progress',
       {
-        mode: 'no-cors',
         //@ts-ignore
         headers: { uid: userId },
       }

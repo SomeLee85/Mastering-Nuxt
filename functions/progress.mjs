@@ -16,6 +16,7 @@ export default async function (req, context) {
   data.forEach((snapshot) => {
     snapshot.forEach((d) => {
       let chapterSlug = snapshot.key;
+      console.log('🚀 ~ snapshot.forEach ~ chapterSlug:', chapterSlug);
 
       if (!obj[chapterSlug] || !_.isObject(obj[chapterSlug])) {
         obj[chapterSlug] = {};
@@ -26,5 +27,6 @@ export default async function (req, context) {
       }
     });
   });
+
   return new Response(JSON.stringify(obj));
 }

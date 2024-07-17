@@ -28,11 +28,9 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/user';
 const user = useUserStore();
-// const supabase = useSupabaseClient();
 
 import { getAuth, GithubAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
-// import { getDatabase } from 'firebase/database';
-// const db = getDatabase();
+
 const auth = getAuth();
 const provider = new GithubAuthProvider();
 
@@ -66,7 +64,7 @@ defineProps({
 
 defineEmits(['update:modelValue']);
 
-const name = computed(() => user.user.displayName);
+const name = computed(() => user.user.reloadUserInfo.screenName);
 
 const profile = computed(() => user.user.photoURL);
 </script>

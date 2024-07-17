@@ -8,13 +8,6 @@
           href="/course/chapter/1-chapter-1/lesson/1-introduction-to-typescript-with-vue-js-3"
           >Click here to access the course.</a
         >
-        <!-- <GitHubLogin /> -->
-        <!-- <button
-          @click="login"
-          class="mt-4 w-full text-md text-black h-12 px-16 rounded focus:outline-none focus:shadow-outline flex items-center justify-center transition bg-blue-300 hover:bg-blue-200"
-        >
-          Login with Github to access
-        </button> -->
       </div>
       <div v-else-if="user.user === null">
         <h1 class="text-xl" style="padding-bottom: 10%">Please sign in before purchasing course.</h1>
@@ -23,7 +16,7 @@
       <form v-else @submit.prevent="handleSubmit">
         <h2 class="font-bold text-xl text-center">
           Buying {{ title }} for
-          {{ user.user.email }}
+          {{ user.user.reloadUserInfo.screenName }}
         </h2>
         <div class="mt-8 text-base width bg-white py-8 px-6 rounded shadow-md">
           <div id="card-element">
