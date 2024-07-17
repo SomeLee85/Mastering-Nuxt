@@ -13,7 +13,7 @@ export default async function (req, context) {
   // We only have one course for now, so we have the price hard-coded
   //sets the price that will be charged through stripe
   const stripe = require('stripe')(
-    'sk_test_51PQBMnRrMsBQdyzaYrNmmFHi6d8hwKgPCCgD0Nz1s1caCORjgQTOQ2cOY9nxFzAmPdL0kMXsjYwNKvIycsx9y7DU00hc2xctor'
+    'pk_test_51PQBMnRrMsBQdyzajthxxUTcQxn8DwDfhXX3VzbaoRAjUk7Pik1ihoefhjc2jSijFepnsvdHnD7L02QlEdsxdD7h00pAanPZI6'
   );
   let paymentIntent = { id: null, client_secret: null };
   try {
