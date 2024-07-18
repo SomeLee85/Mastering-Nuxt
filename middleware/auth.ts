@@ -12,7 +12,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
       user2.isLoggedIn = true;
       user2.user = user;
       /*!!!!!!! Need to change the fetch url when deploying to netlify !!!!!!!!*/
-      const hasAccess = await usePugFetch(`${config.public.prodApiUrl}/.netlify/functions/hasAccess`, {
+      const hasAccess = await usePugFetch(`${config.public.apiUrl}/.netlify/functions/hasAccess`, {
         headers: { userEmail: user2.user.email, userId: user2.user.uid },
       });
       console.log('🚀 ~ onAuthStateChanged ~ hasAccess:', hasAccess);
