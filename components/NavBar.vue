@@ -5,7 +5,7 @@
       Home
     </a>
     <p class="hover:bg-gray-600 rounded" style="padding: 20px">
-      <DropDown></DropDown>
+      <DropDownPug />
     </p>
     <a class="hover:bg-gray-600 rounded" href="/FAQ" style="padding: 23px">FAQs</a
     ><a class="hover:bg-gray-600 rounded" href="/about" style="padding: 23px">About</a>

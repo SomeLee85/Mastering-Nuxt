@@ -13,7 +13,7 @@ export default async function (req, context) {
 
   // No user is logged in
   if (!userId) {
-    console.log('(hasAccess)User is not signed in. (user):', userId);
+    console.log('User is not signed in. (user):', userId);
     return new Response(false);
   }
 

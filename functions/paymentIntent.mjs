@@ -9,10 +9,7 @@ export default async function (req, context) {
   const userId = req.headers.get('uId');
 
   console.log('~ userEmail ~', userEmail, userId);
-  // const { email } = await readBody(event);
-  // const userId = getHeader(event, 'Cookie');
-  // We only have one course for now, so we have the price hard-coded
-  //sets the price that will be charged through stripe
+
   const stripe = Stripe(
     'sk_test_51PQBMnRrMsBQdyzaYrNmmFHi6d8hwKgPCCgD0Nz1s1caCORjgQTOQ2cOY9nxFzAmPdL0kMXsjYwNKvIycsx9y7DU00hc2xctor'
   );
@@ -28,9 +25,7 @@ export default async function (req, context) {
   } catch (error) {
     console.error(error);
   }
-  // Create a course purchase record
-  //If nothing is being printed it may be looking for userId when there isnt one.
-  // try {
+
   function writeUserData() {
     const db = getDatabase();
     const ref = db.ref('/users');

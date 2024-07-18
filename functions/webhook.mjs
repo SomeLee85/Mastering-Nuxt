@@ -25,7 +25,6 @@ async function handlePaymentIntentSucceeded(paymentIntent, email) {
     const db = getDatabase();
     var uid = '';
     const ref = db.ref('/users');
-
     const data = await ref.get();
     data.forEach((d) => {
       const val = d.val();
