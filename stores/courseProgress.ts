@@ -9,6 +9,7 @@ export const useCourseProgress = defineStore('courseProgress', () => {
   // Initialize progress from local storage
   const progress = ref<CourseProgress>({});
   const initialized = ref(false);
+  const config = useRuntimeConfig();
 
   async function initialize() {
     // If the course has already been initialized, return
@@ -17,7 +18,7 @@ export const useCourseProgress = defineStore('courseProgress', () => {
 
     let userId = await $auth.currentUser?.uid;
 
-    const { data: userProgress } = await useFetch<CourseProgress>('https://mastering-nuxt-netlify.netlify.app/.netlify/functions/progress', {
+    const { data: userProgress } = await useFetch<CourseProgress>(`${config.public.prodApiUrl}/.netlify/functions/progress`, {
       //@ts-ignore
       headers: { uid: userId },
     });

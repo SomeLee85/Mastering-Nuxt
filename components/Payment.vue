@@ -2,6 +2,7 @@
   <Modal @close="$emit('close')">
     <div class="bg-slate-200 p-8 rounded-xl w-full max-w-2xl">
       <div v-if="success" class="flex flex-col justify-center items-center space-y-6">
+        <Confetti></Confetti>
         <h2 class="text-xl font-bold">Thanks for buying the course!</h2>
         <a
           class="hover:underline hover:text-blue-500"
@@ -43,7 +44,9 @@
 
 <script setup>
 import { getDatabase, get, ref as fbRef } from 'firebase/database';
+
 const db = getDatabase();
+
 const titleRef = fbRef(db, 'title');
 const title = await get(titleRef).then((snapshot) => snapshot.val());
 

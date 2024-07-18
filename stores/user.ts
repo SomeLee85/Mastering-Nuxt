@@ -6,5 +6,14 @@ import { defineStore } from 'pinia';
 // the first argument is a unique id of the store across your application
 
 export const useUserStore: any = defineStore('user', {
-  state: () => ({ isLoggedIn: false, user: null }),
+  state: () => ({ isLoggedIn: false, user: null, paid: false }),
+  // getters: {
+  //   // automatically infers the return type as a number
+  //   hasPaid(state) {
+  //     //@ts-ignore
+  //     console.log('🚀 ~ hasPaid ~ state?.user?.verified:', state?.user?.verified);
+  //     // @ts-ignore
+  //     return state?.user?.verified || false;
+  //   },
+  // },
 });

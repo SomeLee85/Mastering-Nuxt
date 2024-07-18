@@ -28,9 +28,10 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/user';
 const user = useUserStore();
-
+import { getDatabase, ref as fbRef, get } from 'firebase/database';
 import { getAuth, GithubAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
 
+const db = getDatabase();
 const auth = getAuth();
 const provider = new GithubAuthProvider();
 
@@ -55,6 +56,13 @@ const login = async () => {
 };
 
 user.user = auth.currentUser;
+
+onMounted(async () => {
+  if (user.isLoggedIn) {
+    const paidRef = fbRef(db, 'users/' + user.user.uid);
+    user.paid = await get(paidRef).then((snapshot) => snapshot.val().verified);
+  }
+});
 defineProps({
   modelValue: {
     type: Boolean,

@@ -7,7 +7,6 @@ onMounted(async () => {
   if (user) {
     const route = useRoute();
     const router = useRouter();
-    console.log('This should be the route to [paymentId]: ', route.params.paymentId);
     try {
       await useFetch(`/functions/${route.params.paymentId}`, {
         headers: useRequestHeaders(['cookie']),
