@@ -1,7 +1,7 @@
 <template>
   <span
     class="-left-12 text-xl w-8 h-8 text-white rounded-full inline-flex absolute items-center justify-center mr-4"
-    :class="'bg-emerald-500'"
+    :class="'bg-emerald-600'"
   >
     <slot>&#10003;</slot>
   </span>

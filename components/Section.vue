@@ -1,12 +1,7 @@
 <template>
-  <div
-    class="section bg-white p-24 flex flex-col items-center"
-  >
+  <div class="section bg-slate-200 p-24 flex flex-col items-center">
     <div class="w-full max-w-4xl">
-      <h2
-        v-if="title"
-        class="text-4xl font-bold pb-8 text-center"
-      >
+      <h2 v-if="title" class="text-4xl font-bold pb-8 text-center">
         {{ title }}
       </h2>
       <div v-bind="$attrs">
@@ -31,7 +26,13 @@ export default {
 </script>
 
 <style>
-.section:nth-of-type(odd) {
-  @apply bg-blue-500 text-white;
+.section:first-child {
+  @apply bg-blue-800 text-white;
+}
+.section:last-child {
+  @apply bg-blue-800 text-white;
+}
+section.type-a {
+  @apply bg-blue-800 text-white;
 }
 </style>
