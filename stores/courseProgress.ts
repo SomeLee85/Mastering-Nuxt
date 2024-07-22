@@ -18,7 +18,7 @@ export const useCourseProgress = defineStore('courseProgress', () => {
 
     let userId = await $auth.currentUser?.uid;
 
-    const { data: userProgress } = await useFetch<CourseProgress>(`${config.public.apiUrl}/.netlify/functions/progress`, {
+    const { data: userProgress } = await useFetch<CourseProgress>(`${config.public.prodApiUrl}/.netlify/functions/progress`, {
       //@ts-ignore
       headers: { uid: userId },
     });
