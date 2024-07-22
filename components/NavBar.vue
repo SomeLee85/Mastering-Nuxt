@@ -4,9 +4,7 @@
       <img :src="homeIcon" style="width: 30px; height: 27px; float: left; transform: translate(-8px, -5px)" />
       Home
     </a>
-    <p class="hover:bg-sky-800 rounded" style="padding: 21px">
-      <DropDownPug />
-    </p>
+    <DropDownPug />
     <a class="hover:bg-sky-800 rounded" href="/FAQ" style="padding: 25px">FAQs</a
     ><a class="hover:bg-sky-800 rounded" href="/about" style="padding: 25px">About</a>
     <div v-if="user?.isLoggedIn" style="position: absolute; right: 0.2%">
@@ -20,9 +18,8 @@
 </template>
 
 <script setup lang="ts">
-import homeIcon from '~/assets/images/home-icon-G.png';
+import homeIcon from '~/assets/images/home-icon-SG.png';
 import { useUserStore } from '@/stores/user';
-import { FwbDropdown } from 'flowbite-vue';
 const user = useUserStore();
 
 const dropped = false;

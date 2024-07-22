@@ -11,8 +11,8 @@
         >
       </div>
       <div v-else-if="user.user === null">
-        <h1 class="text-xl" style="padding-bottom: 10%">Please sign in before purchasing course.</h1>
-        <GitHubLogin />
+        <h1 class="text-xl text-center" style="padding-bottom: 10%">Please sign in before purchasing course.</h1>
+        <p class="flex justify-center"><GitHubLogin /></p>
       </div>
       <form v-else @submit.prevent="handleSubmit">
         <h2 class="font-bold text-xl text-center">
