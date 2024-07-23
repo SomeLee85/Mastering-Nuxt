@@ -1,7 +1,7 @@
 <template>
   <Carousel ref="myCarousel" :items-to-show="1.25" :autoplay="3000" :wrap-around="true">
     <Slide v-for="slide in screenshots" :key="slide">
-      <img class="carousel__item" :src="slide" height="700"></img>
+      <img class="carousel__item" :src="slide"></img>
     </Slide>
 
     <template #addons>
@@ -23,5 +23,7 @@ const myCarousel = ref()
 import { Carousel, Pagination, Slide } from 'vue3-carousel';
 
 import 'vue3-carousel/dist/carousel.css';
+
+
 
 </script>
